@@ -31,13 +31,11 @@
     <!-- Botões superiores -->
     <div class="sairExcel">
       <button id="logoutButton1">Sair</button>
-      <!-- exportar excel -->
-      <img class="img_link_excel" src="/images/excel.png" alt="Exportar Excel" id="btnExportExcel">
-      <!-- importar excel -->
-      <img class="img_link_excel" src="/images/export.png" alt="Importar Excel" id="btnImportExcel">
+      <img class="img_link_excel" src="/images/excel.png"   alt="Exportar Excel" id="btnExportExcel">
+      <img class="img_link_excel" src="/images/export.png"  alt="Importar Excel" id="btnImportExcel">
       <input type="file" id="fileImportExcel" accept=".xlsx,.xls" style="display:none">
       <img class="img_link_excel" src="/images/diskette.png" alt="Salvar Dados" id="btnSave">
-      <img class="img_link_excel" src="/images/clean.png" alt="Limpar Dados" id="btnClean">
+      <img class="img_link_excel" src="/images/clean.png"    alt="Limpar Dados" id="btnClean">
     </div>
 
     <!-- Última modificação -->
@@ -59,19 +57,17 @@
           <div class="filter-row filter-row-top">
             <div class="filter-item">
               <label for="representanteFilter1">Representante:</label>
-              <input type="text" id="representanteFilter1">
+              <input type="text" id="representanteFilter1" placeholder="Ex.: P7, NDR, NCOLLOR">
             </div>
+
             <div class="filter-item">
-              <label for="notaFilter1">Razão Social:</label>
-              <input type="text" id="notaFilter1">
+              <label for="clienteFilter1">Cliente:</label>
+              <input type="text" id="clienteFilter1" placeholder="Ex.: 3M, ADITIVE PLASTICOS">
             </div>
+
             <div class="filter-item">
-              <label for="clienteCNPJFilter1">Cliente:</label>
-              <input type="text" id="clienteCNPJFilter1">
-            </div>
-            <div class="filter-item">
-              <label for="clienteCNPJFilter1">CNPJ:</label>
-              <input type="text" id="clienteCNPJFilter1" placeholder="Ex.: 08712676000110">
+              <label for="cnpjFilter1">CNPJ:</label>
+              <input type="text" id="cnpjFilter1" inputmode="numeric" placeholder="Somente números, ex.: 08712676000110">
             </div>
           </div>
         </div>
@@ -87,25 +83,10 @@
       <table id="order-table1">
         <thead>
           <tr>
-            <th>Código do PN</th>
-            <th>Nome do PN</th>
-            <th>Cliente</th>
-            <th>Tipo Venda</th>
-            <th>Fabricante</th>
-            <th>Código</th>
-            <th>Produto</th>
-            <th>NOV/25</th>
-            <th>DEZ/25</th>
-            <th>JAN/26</th>
-            <th>FEV/26</th>
-            <th>MAR/26</th>
-            <th>ABR/26</th>
-            <th>MAI/26</th>
+            <!-- O Cabeçalho é gerado dinamicamente pelo JS -->
           </tr>
         </thead>
-        <tbody>
-          <!-- Dados serão preenchidos dinamicamente -->
-        </tbody>
+        <tbody></tbody>
       </table>
     </div>
   </div>
@@ -117,22 +98,14 @@
   <script>
     async function logoutUser() {
       try {
-        const res = await fetch('/api/logout', {
-          method: 'POST',
-          credentials: 'include'
-        });
-
-        if (res.ok) {
-          window.location.href = '/login2';
-        } else {
-          alert('Erro ao sair. Tente novamente.');
-        }
+        const res = await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+        if (res.ok) window.location.href = '/login2';
+        else alert('Erro ao sair. Tente novamente.');
       } catch (err) {
         console.error('Erro no logout:', err);
         alert('Erro de conexão ao sair.');
       }
     }
-
     document.getElementById('logoutButton1').addEventListener('click', logoutUser);
   </script>
 </body>

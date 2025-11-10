@@ -10,6 +10,13 @@
   const btnClean     = document.getElementById('btnClean');
   const inpFile      = document.getElementById('fileImportExcel');
 
+  // Filtros (corrigidos)
+  const inpRep   = document.getElementById('representanteFilter1');
+  const inpCli   = document.getElementById('clienteFilter1');
+  const inpCNPJ  = document.getElementById('cnpjFilter1');
+  const btnApply = document.getElementById('applyFilters1');
+  const btnClear = document.getElementById('clearFilters1');
+
   // ===== Helpers de data para o cabeçalho =====
   function excelSerialToDate(n) {
     const base = new Date(Date.UTC(1899, 11, 30));
@@ -21,9 +28,7 @@
     return `${m}/${y}`; // ex.: NOV/2025
   }
   function maskHeaderToMMMYYYY(h) {
-    // Já está no formato desejado?
     if (typeof h === 'string' && /^[A-Z]{3}\/\d{4}$/.test(h)) return h;
-
     if (typeof h === 'string') {
       const parsed = Date.parse(h);
       if (!isNaN(parsed)) return dateToMMMYYYY(new Date(parsed));
@@ -49,6 +54,10 @@
     return Number.isFinite(num) ? num : '';
   }
 
+  // Helper de filtros
+  const onlyDigits = (s) => String(s ?? '').replace(/\D/g, '');
+  const normStr    = (s) => String(s ?? '').toUpperCase();
+
   // 1) quem sou eu?
   let me;
   try {
@@ -56,7 +65,7 @@
     if (!r.ok) throw new Error('not auth');
     me = (await r.json()).user; // {email, role, name}
   } catch {
-    return; // o server já trata redirecionamento
+    return;
   }
   const isAdmin = me.role === 'admin';
 
@@ -73,7 +82,7 @@
     th.textContent = maskHeaderToMMMYYYY(h);
     tableHeadRow.appendChild(th);
   }
-  // --- nova coluna no cabeçalho ---
+  // coluna extra: data modificação
   const thDate = document.createElement('th');
   thDate.textContent = 'Data Modificação';
   tableHeadRow.appendChild(thDate);
@@ -83,7 +92,6 @@
   btnImport.style.display = isAdmin ? '' : 'none';
   btnClean.style.display  = isAdmin ? '' : 'none';
 
-  // Import/Export
   btnExport?.addEventListener('click', () => window.location.href = '/api/export.xlsx');
   btnImport?.addEventListener('click', () => inpFile.click());
   inpFile?.addEventListener('change', async (e) => {
@@ -97,28 +105,60 @@
     location.reload();
   });
 
-  // 5) carregar linhas
+  // 5) carregar linhas (mantemos em memória para filtrar sem bater no server)
   async function loadRows() {
     const r = await fetch('/api/rows', { credentials:'include' });
     const js = await r.json();
     return js.rows || [];
   }
 
-  // ---- Buffer de alterações (idDaLinha -> {col:valor,...})
+  let allRows = [];
   const pending = new Map();
 
-  async function render() {
-    const rows = await loadRows();
+  function applyFilters(rows) {
+    const rep  = normStr(inpRep.value.trim());
+    const cli  = normStr(inpCli.value.trim());
+    const cnpj = onlyDigits(inpCNPJ.value.trim());
 
-    // Badge de última modificação
-    if (isAdmin) {
-      const last = rows.reduce((acc,r)=> !acc || new Date(r.modifiedAt) > new Date(acc.modifiedAt) ? r : acc, null);
-      lastModInfo.textContent = last ? `Última modificação: ${new Date(last.modifiedAt).toLocaleString('pt-BR')} por ${last.modifiedBy || '—'}` : '';
-    } else {
-      const mine = rows.filter(r => (r.ownerKey||'').toUpperCase() === me.role.toUpperCase());
-      const last = mine.reduce((acc,r)=> !acc || new Date(r.modifiedAt) > new Date(acc.modifiedAt) ? r : acc, null);
-      lastModInfo.textContent = last ? `Sua última modificação: ${new Date(last.modifiedAt).toLocaleString('pt-BR')}` : '';
+    return rows.filter(r => {
+      const data = r.data || {};
+
+      // Representante -> coluna "Usuario"
+      if (rep) {
+        const usuario = normStr(data['Usuario']);
+        if (!usuario.includes(rep)) return false;
+      }
+
+      // Cliente -> coluna "Cliente"
+      if (cli) {
+        const cliente = normStr(data['Cliente']);
+        if (!cliente.includes(cli)) return false;
+      }
+
+      // CNPJ -> coluna "Código do PN"
+      // PN vem como "C" + CNPJ (ex.: C45985371000108). Comparamos só dígitos.
+      if (cnpj) {
+        const pnDigits = onlyDigits(data['Código do PN']);
+        if (!pnDigits.includes(cnpj)) return false; // pode trocar para startsWith se preferir
+      }
+
+      return true;
+    });
+  }
+
+  async function render() {
+    if (allRows.length === 0) {
+      allRows = await loadRows();
     }
+
+    const rows = applyFilters(allRows);
+
+    // Badge última modificação
+    const universe = isAdmin ? rows : rows.filter(r => (r.ownerKey||'').toUpperCase() === me.role.toUpperCase());
+    const last = universe.reduce((acc, r) => !acc || new Date(r.modifiedAt) > new Date(acc.modifiedAt) ? r : acc, null);
+    lastModInfo.textContent = last
+      ? `${isAdmin ? 'Última modificação' : 'Sua última modificação'}: ${new Date(last.modifiedAt).toLocaleString('pt-BR')} ${last.modifiedBy ? 'por ' + last.modifiedBy : ''}`
+      : '';
 
     tableBody.innerHTML = '';
 
@@ -153,18 +193,15 @@
         tr.appendChild(td);
       }
 
-      // --- nova célula com a data de modificação ---
       const tdDate = document.createElement('td');
-      tdDate.textContent = row.modifiedAt
-        ? new Date(row.modifiedAt).toLocaleString('pt-BR')
-        : '';
+      tdDate.textContent = row.modifiedAt ? new Date(row.modifiedAt).toLocaleString('pt-BR') : '';
       tr.appendChild(tdDate);
 
       tableBody.appendChild(tr);
     }
   }
 
-  // 6) Salvar pendências (várias linhas)
+  // salvar pendências
   btnSave.addEventListener('click', async () => {
     if (pending.size === 0) return alert('Não há alterações para salvar.');
 
@@ -186,6 +223,7 @@
       if (!ok) alert('Algumas linhas não foram salvas.');
       else alert('Alterações salvas!');
       pending.clear();
+      allRows = []; // força recarregar do server para pegar modifiedAt/by atualizados
       await render();
     } finally {
       btnSave.style.pointerEvents = '';
@@ -193,7 +231,7 @@
     }
   });
 
-  // 7) Limpar dados (admin) -> apaga TODAS as linhas
+  // limpar dados (admin)
   btnClean.addEventListener('click', async () => {
     if (!isAdmin) return;
     if (!confirm('Tem certeza que deseja APAGAR TODAS as linhas da tabela?')) return;
@@ -206,6 +244,20 @@
     btnClean.style.pointerEvents = '';
     btnClean.style.opacity = '';
     location.reload();
+  });
+
+  // ligar filtros
+  btnApply.addEventListener('click', () => render());
+  btnClear.addEventListener('click', () => {
+    inpRep.value = '';
+    inpCli.value = '';
+    inpCNPJ.value = '';
+    render();
+  });
+
+  // Enter aplica
+  [inpRep, inpCli, inpCNPJ].forEach(el => {
+    el.addEventListener('keydown', (e) => { if (e.key === 'Enter') render(); });
   });
 
   await render();
