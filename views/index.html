@@ -1,110 +1,139 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes Logística</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-    <link rel="icon"  type="image/png" sizes="32x32" href="/images/favicon-32x32.png" >
-    <link rel="icon"  type="image/png" sizes="16x16" href="/images/favicon-16x16.png" >
-    <link rel="manifest" href="/images/site.webmanifest">
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <link rel="stylesheet" href="/css/logistica.css?v=1743796395890">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FORECAST DE VENDAS</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="manifest" href="/images/site.webmanifest">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <link rel="stylesheet" href="/css/logistica.css?v=1743796395890">
 </head>
+
 <body>
-<div class="container">
+  <div class="container">
+    <!-- Cabeçalho -->
     <div class="header">
-        <header class="header-container">
-            <div class="header-left">
-                <div class="header-logo">
-                    <a href="https://kidszoneworld.com.br/portal-do-representante/">
-                        <img class="img_link" src="/images/logo-nexo-sem-fundo.png" alt="Imagem Nexo">
-                    </a>
-                </div>
-                <h3 class="header-title">Forecast de Vendas</h3>
-            </div>
-        </header>
+      <header class="header-container">
+        <div class="header-left">
+          <div class="header-logo">
+            <a href="https://nexointernational.com.br/">
+              <img class="img_link" src="/images/logo-nexo-sem-fundo.png" alt="Imagem Nexo">
+            </a>
+          </div>
+          <h3 class="header-title">Forecast de Vendas</h3>
+        </div>
+      </header>
     </div>
 
+    <!-- Botões superiores -->
     <div class="sairExcel">
-        <button id="logoutButton1">Sair</button>
+      <button id="logoutButton1">Sair</button>
+      <!-- exportar excel -->
+      <img class="img_link_excel" src="/images/excel.png" alt="Exportar Excel" id="btnExportExcel">
+      <!-- importar excel -->
+      <img class="img_link_excel" src="/images/export.png" alt="Importar Excel" id="btnImportExcel">
+      <input type="file" id="fileImportExcel" accept=".xlsx,.xls" style="display:none">
+      <img class="img_link_excel" src="/images/diskette.png" alt="Salvar Dados" id="btnSave">
+      <img class="img_link_excel" src="/images/clean.png" alt="Limpar Dados" id="btnClean">
     </div>
 
+    <!-- Última modificação -->
+    <div id="lastModInfo" style="margin:8px 0; font-weight:600;"></div>
 
     <!-- Feedback -->
-    <div id="feedback1" style="display: none; text-align: center; font-weight: bold; margin: 10px; color: red;"></div>
-    
+    <div id="feedback1" style="display:none; text-align:center; font-weight:bold; margin:10px; color:red;"></div>
+
     <!-- Filtros -->
     <div id="filters">
-        <!-- Botão de menu para telas menores -->
-        <div class="menu-toggle">
-            <button id="menuToggle" class="menu-button">
-                <span class="menu-icon">☰</span> Filtros
-            </button>
-        </div>
+      <div class="menu-toggle">
+        <button id="menuToggle" class="menu-button">
+          <span class="menu-icon">☰</span> Filtros
+        </button>
+      </div>
 
-        <!-- Contêiner dos filtros (será escondido/mostrado) -->
-        <div class="filter-container" id="filterContainer">
-            <div class="filter-inputs">
-                <div class="filter-row filter-row-top">
-                    <div class="filter-item">
-                        <label for="representanteFilter1">Representante:</label>
-                        <input type="text" id="representanteFilter1">
-                    </div>
-                    <div class="filter-item">
-                        <label for="notaFilter1">Razão Social:</label>
-                        <input type="text" id="notaFilter1">
-                    </div>
-                    <div class="filter-item">
-                        <label for="clienteCNPJFilter1">Cliente:</label>
-                        <input type="text" id="clienteCNPJFilter1" >
-                    </div>
-                        <div class="filter-item">
-                        <label for="clienteCNPJFilter1">CNPJ:</label>
-                        <input type="text" id="clienteCNPJFilter1" placeholder="Ex.: 08712676000110">
-                    </div>
-                </div>
-                <div class="filter-row filter-row-bottom">
-                             
-                </div>
+      <div class="filter-container" id="filterContainer">
+        <div class="filter-inputs">
+          <div class="filter-row filter-row-top">
+            <div class="filter-item">
+              <label for="representanteFilter1">Representante:</label>
+              <input type="text" id="representanteFilter1">
             </div>
-            <!-- Botões de filtro agora dentro do filter-container -->
-            <div class="filter-buttons">
-                <button id="applyFilters1">Aplicar Filtros</button>
-                <button id="clearFilters1">Limpar Filtros</button>
+            <div class="filter-item">
+              <label for="notaFilter1">Razão Social:</label>
+              <input type="text" id="notaFilter1">
             </div>
+            <div class="filter-item">
+              <label for="clienteCNPJFilter1">Cliente:</label>
+              <input type="text" id="clienteCNPJFilter1">
+            </div>
+            <div class="filter-item">
+              <label for="clienteCNPJFilter1">CNPJ:</label>
+              <input type="text" id="clienteCNPJFilter1" placeholder="Ex.: 08712676000110">
+            </div>
+          </div>
         </div>
+        <div class="filter-buttons">
+          <button id="applyFilters1">Aplicar Filtros</button>
+          <button id="clearFilters1">Limpar Filtros</button>
+        </div>
+      </div>
     </div>
 
     <!-- Tabela -->
     <div class="table-container">
-        <table id="order-table1">
-            <thead>
-                <tr>
-                    <th class="dataEmissao">Código do PN</th>
-                    <th class="numNotas">Nome do PN</th>
-                    <th class="codCliente">Cliente</th>
-                    <th class="cliente">Tipo Venda</th>
-                    <th class="clienteCNPJ">Fabricante</th>
-                    <th class="uf">Código</th>
-                    <th class="codRep">Produto</th>
-                    <th class="codTrans">NOV/25</th>
-                    <th class="transportadora">DEZ/25</th>
-                    <th class="saida">JAN/26</th>
-                    <th class="previsaoEntrega">FEV/26</th>
-                    <th class="dataEntrega">MAR/26</th>
-                    <th class="statusEntrega">ABR/26</th> 
-                    <th class="agenda">MAI/26</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Dados serão adicionados dinamicamente -->
-            </tbody>
-        </table>
-     </div>
+      <table id="order-table1">
+        <thead>
+          <tr>
+            <th>Código do PN</th>
+            <th>Nome do PN</th>
+            <th>Cliente</th>
+            <th>Tipo Venda</th>
+            <th>Fabricante</th>
+            <th>Código</th>
+            <th>Produto</th>
+            <th>NOV/25</th>
+            <th>DEZ/25</th>
+            <th>JAN/26</th>
+            <th>FEV/26</th>
+            <th>MAR/26</th>
+            <th>ABR/26</th>
+            <th>MAI/26</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dados serão preenchidos dinamicamente -->
+        </tbody>
+      </table>
+    </div>
   </div>
-    <script src="/logistica02.js?v=1743796395890"></script>
+
+  <!-- Script principal -->
+  <script src="/logistica02.js?v=1743796395890"></script>
+
+  <!-- Script de logout -->
+  <script>
+    async function logoutUser() {
+      try {
+        const res = await fetch('/api/logout', {
+          method: 'POST',
+          credentials: 'include'
+        });
+
+        if (res.ok) {
+          window.location.href = '/login2';
+        } else {
+          alert('Erro ao sair. Tente novamente.');
+        }
+      } catch (err) {
+        console.error('Erro no logout:', err);
+        alert('Erro de conexão ao sair.');
+      }
+    }
+
+    document.getElementById('logoutButton1').addEventListener('click', logoutUser);
+  </script>
 </body>
 </html>

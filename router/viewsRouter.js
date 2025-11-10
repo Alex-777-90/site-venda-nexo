@@ -1,12 +1,18 @@
 const express = require('express');
 const path = require('path');
+const { requireAuth } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Rota para a página inicial
-router.get('/', (req, res) => {
-    console.log('Rota / acessada');
-    res.sendFile(path.resolve(__dirname, '..', 'views', 'index.html'));
+// Página de login
+router.get('/login2', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '..', 'views', 'login.html'));
+});
+
+// Home protegida (opcional — remova requireAuth se quiser pública)
+router.get('/', requireAuth, (req, res) => {
+  console.log('Rota / acessada');
+  res.sendFile(path.resolve(__dirname, '..', 'views', 'index.html'));
 });
 
 
@@ -19,8 +25,6 @@ router.get('/error-401', (req, res) => {
 router.get('/error-404', (req, res) => {
     res.status(404).sendFile(path.join(__dirname, '..', 'views', 'error-404.html'));
 });
-
-
 
 
 module.exports = router;

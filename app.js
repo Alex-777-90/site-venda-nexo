@@ -5,7 +5,8 @@ const session = require('express-session');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const viewsRouter = require('./router/viewsRouter');
-
+const authRouter  = require('./router/authRouter');
+const dataRouter  = require('./router/dataRouter');
 
 
 
@@ -26,24 +27,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Adicionar esta linha para configurar o proxy
 app.set('trust proxy', 1); // Necessário para cookies seguros em proxies (como Vercel)
-
-
 app.use(cookieParser());
+
+
+// **APIs de autenticação primeiro**
+app.use(authRouter);
 
 // Usar o router para as views
 app.use('/', viewsRouter);
+
+app.use(dataRouter);
 
 app.get('/teste', (req, res) => {
     res.send('Rota de teste funcionando!');
 });
 
 
-
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://pedido-venda-teste.vercel.app'); // Substitua pela URL do seu site
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    next();
-});
 
 // Iniciar o servidor
 app.listen(PORT, () => {

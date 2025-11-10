@@ -1,297 +1,212 @@
-let ordersData1 = [];
-let filteredData1 = [];
+// public/logistica02.js
+(async function main(){
+  const tableHeadRow = document.querySelector('#order-table1 thead tr');
+  const tableBody    = document.querySelector('#order-table1 tbody');
+  const lastModInfo  = document.getElementById('lastModInfo');
 
-// Mostrar Feedback
-function showFeedback(message) {
-    const feedback = document.getElementById('feedback1');
-    feedback.style.display = 'block';
-    feedback.textContent = message;
+  const btnExport    = document.getElementById('btnExportExcel');
+  const btnImport    = document.getElementById('btnImportExcel');
+  const btnSave      = document.getElementById('btnSave');
+  const btnClean     = document.getElementById('btnClean');
+  const inpFile      = document.getElementById('fileImportExcel');
 
-}
+  // ===== Helpers de data para o cabeçalho =====
+  function excelSerialToDate(n) {
+    const base = new Date(Date.UTC(1899, 11, 30));
+    return new Date(base.getTime() + Math.round(Number(n)) * 24 * 60 * 60 * 1000);
+  }
+  function dateToMMMYYYY(d) {
+    const m = d.toLocaleString('pt-BR', { month: 'short' }).replace('.', '').toUpperCase();
+    const y = d.getFullYear();
+    return `${m}/${y}`; // ex.: NOV/2025
+  }
+  function maskHeaderToMMMYYYY(h) {
+    // Já está no formato desejado?
+    if (typeof h === 'string' && /^[A-Z]{3}\/\d{4}$/.test(h)) return h;
 
-// Ocultar Feedback
-function hideFeedback() {
-    const feedback = document.getElementById('feedback1');
-    feedback.style.display = 'none';
-    feedback.textContent = '';
-}
-
-// Função para formatar a data atual no formato YYYY-MM-DD
-function getCurrentDateFormatted() {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0'); // +1 porque os meses começam em 0
-    const day = String(today.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-}
-
-// Função para exportar os dados para Excel
-function exportToExcel(data) {
-    const addOneDay = (dateStr) => {
-        if (!dateStr) return "";
-        const date = new Date(dateStr);
-        date.setDate(date.getDate() + 1);
-        return date.toLocaleDateString('pt-BR');
-    };
-
-    const exportData = data.map(order => ({
-        "Data da emissão": addOneDay(order.EMISSÃO),
-        "Núm notas": order.NF || "",
-        "Cód Cliente": order.codCliente || "",
-        "Cliente": order.NOME || "",
-        "Cliente CNPJ": order.CNPJ?.replace(/[\.\-\/]/g, '') || "",
-        "UF": order.UF || "",
-        "Cód Rep": order.Rep || "",
-        "Cod Trans": order.CodTransporte || "",
-        "Transportadora": order.TRANSPORTES || "",
-        "Saída": addOneDay(order.SAÍDA),
-        "Previsão de Entrega": addOneDay(order.PrevisaoEntrega),
-        "Data de Entrega": order.ENTREGUE ? addOneDay(order.ENTREGUE) : "",
-        "Status Entrega": order.STATUS_ENTREGA || "",
-        "Agenda": order.AGENDA || "",
-        "Ocorrência": order.OCORRÊNCIA || ""
-    }));
-
-    // Criar uma nova planilha e worksheet
-    const worksheet = XLSX.utils.json_to_sheet(exportData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Notas");
-
-    // Ajustar a largura das colunas (opcional)
-    worksheet['!cols'] = [
-        { wch: 15 }, // Data da emissão
-        { wch: 10 }, // Núm notas
-        { wch: 12 }, // Cód Cliente
-        { wch: 30 }, // Cliente
-        { wch: 20 }, // Cliente CNPJ
-        { wch: 5 },  // UF
-        { wch: 10 }, // Cód Rep
-        { wch: 10 }, // Cod Trans
-        { wch: 30 }, // Transportadora
-        { wch: 15 }, // Saída
-        { wch: 20 }, // Previsão de Entrega
-        { wch: 15 }, // Data de Entrega
-        { wch: 15 }, // Status Entrega
-        { wch: 15 }, // Agenda
-        { wch: 20 }  // Ocorrência
-    ];
-
-    // Definir o nome do arquivo com a data atual
-    const currentDate = getCurrentDateFormatted();
-    const fileName = `Entregas Sul_Sudeste_${currentDate}.xlsx`;
-
-    // Exportar o arquivo
-    XLSX.writeFile(workbook, fileName);
-}
-
-// Carregar detalhes dos pedidos
-async function loadOrderDetailsFromSharePoint() {
-    showFeedback("Carregando dados, aguarde...");
-
-    try {
-        const response = await fetch('/api/logistica/logistica02');
-        if (!response.ok) throw new Error("Erro ao buscar dados do SharePoint");
-        ordersData1 = await response.json();
-        filteredData1 = [...ordersData1]; // Inicialmente, os dados filtrados são os mesmos que os originais
-
-        renderTable(ordersData1);
-        hideFeedback();
-    } catch (error) {
-        console.error("Erro ao carregar dados do SharePoint:", error);
-        showFeedback("Erro ao carregar dados do SharePoint. Recarregue a página.");
+    if (typeof h === 'string') {
+      const parsed = Date.parse(h);
+      if (!isNaN(parsed)) return dateToMMMYYYY(new Date(parsed));
+      if (!isNaN(+h))      return dateToMMMYYYY(excelSerialToDate(+h));
+      return h;
     }
-}
+    if (typeof h === 'number' && Number.isFinite(h)) return dateToMMMYYYY(excelSerialToDate(h));
+    if (h instanceof Date && !isNaN(h.valueOf()))    return dateToMMMYYYY(h);
+    return String(h ?? '');
+  }
 
-// Renderizar tabela
-function renderTable(data) {
-    const orderTableBody1 = document.querySelector('#order-table1 tbody');
-    orderTableBody1.innerHTML = ''; // Limpar tabela
-    data.forEach(order => {
-        const row = document.createElement('tr');
+  // ===== Helpers de moeda =====
+  function fmtBRL(val){
+    if (val === null || val === undefined || val === '') return '';
+    const num = +String(val).replace(/[^\d,-]/g,'').replace(',','.');
+    if (Number.isNaN(num)) return String(val);
+    return num.toLocaleString('pt-BR',{ style:'currency', currency:'BRL' });
+  }
+  function parseToNumber(text){
+    if (!text) return '';
+    const clean = text.replace(/[^\d,-]/g,'').replace(/\.(?=\d{3})/g,'').replace(',','.');
+    const num = parseFloat(clean);
+    return Number.isFinite(num) ? num : '';
+  }
 
-        // Função auxiliar para adicionar 1 dia à data
-        const addOneDay = (dateStr) => {
-            if (!dateStr) return '';
-            const date = new Date(dateStr);
-            date.setDate(date.getDate() + 1); // Adiciona 1 dia
-            return date.toLocaleDateString('pt-BR');
-        };
+  // 1) quem sou eu?
+  let me;
+  try {
+    const r = await fetch('/api/me', { credentials:'include' });
+    if (!r.ok) throw new Error('not auth');
+    me = (await r.json()).user; // {email, role, name}
+  } catch {
+    return; // o server já trata redirecionamento
+  }
+  const isAdmin = me.role === 'admin';
 
-        row.innerHTML = `
-            <td class="dataEmissao">${addOneDay(order.EMISSÃO)}</td>
-            <td class="numNotas">${order.NF || ''}</td>
-            <td class="codCliente">${order.codCliente || ''}</td>
-            <td class="cliente">${order.NOME || ''}</td>
-            <td class="clienteCNPJ">${order.CNPJ?.replace(/[\.\-\/]/g, '') || ''}</td>
-            <td class="uf">${order.UF || ''}</td>
-            <td class="codRep">${order.Rep || ''}</td>
-            <td class="codTrans">${order.CodTransporte || ''}</td>
-            <td class="transportadora">${order.TRANSPORTES || ''}</td>
-            <td class="saida">${addOneDay(order.SAÍDA)}</td>
-            <td class="previsaoEntrega">${addOneDay(order.PrevisaoEntrega)}</td>
-            <td class="dataEntrega">${addOneDay(order.ENTREGUE)}</td>
-            <td class="statusEntrega">${order.STATUS_ENTREGA || ''}</td>
-            <td class="agenda">${order.AGENDA || ''}</td>
-            <td class="ocorrencia">${order.OCORRÊNCIA || ''}</td>
-        `;
-        orderTableBody1.appendChild(row);
-    });
-}
-// Inicializar ao carregar a página
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        const response = await fetch('/session-data');
-        if (!response.ok) throw new Error('Erro ao buscar dados da sessão');
+  // 2) meta (headers dinâmicos)
+  const meta = await fetch('/api/meta', { credentials:'include' }).then(r=>r.json()).then(j=>j.meta);
+  const headers = meta?.headers || [];
+  const nonEditable = meta?.nonEditable || [];
+  const canEditCol = (name) => !nonEditable.includes(name);
 
-        const sessionData = await response.json();
+  // 3) thead dinâmico com máscara "MMM/YYYY"
+  tableHeadRow.innerHTML = '';
+  for (const h of headers) {
+    const th = document.createElement('th');
+    th.textContent = maskHeaderToMMMYYYY(h);
+    tableHeadRow.appendChild(th);
+  }
+  // --- nova coluna no cabeçalho ---
+  const thDate = document.createElement('th');
+  thDate.textContent = 'Data Modificação';
+  tableHeadRow.appendChild(thDate);
 
-        if (sessionData.isAuthenticated) {
-            window.sessionData = sessionData;
+  // 4) botões/visibilidade por role
+  btnExport.style.display = isAdmin ? '' : 'none';
+  btnImport.style.display = isAdmin ? '' : 'none';
+  btnClean.style.display  = isAdmin ? '' : 'none';
 
-            const userNumero = window.sessionData?.userNumero || null;
-            const representanteFilter = document.getElementById('representanteFilter1');
+  // Import/Export
+  btnExport?.addEventListener('click', () => window.location.href = '/api/export.xlsx');
+  btnImport?.addEventListener('click', () => inpFile.click());
+  inpFile?.addEventListener('change', async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const fd = new FormData(); fd.append('file', file);
+    const res = await fetch('/api/import', { method:'POST', body:fd, credentials:'include' });
+    const js  = await res.json().catch(()=>({}));
+    if (!res.ok) return alert('Falha ao importar: ' + (js.error || res.status));
+    alert('Importado com sucesso!');
+    location.reload();
+  });
 
-            if (userNumero) {
-                representanteFilter.value = userNumero;
-                representanteFilter.disabled = true; // Bloqueia o campo
-            }
+  // 5) carregar linhas
+  async function loadRows() {
+    const r = await fetch('/api/rows', { credentials:'include' });
+    const js = await r.json();
+    return js.rows || [];
+  }
 
-            loadOrderDetailsFromSharePoint();
-        } else {
-            console.warn('Usuário não autenticado');
-            window.location.href = '/login2'; // Redireciona para a página de login
-        }
-    } catch (error) {
-        console.error('Erro ao carregar os dados da sessão:', error);
-    }
-});
+  // ---- Buffer de alterações (idDaLinha -> {col:valor,...})
+  const pending = new Map();
 
-// Aplicar Filtros
-async function applyFilters1() {
-    showFeedback("Aplicando filtros, aguarde...");
+  async function render() {
+    const rows = await loadRows();
 
-    try {
-        const representanteFilter1 = document.getElementById('representanteFilter1').value.trim();
-        const clienteCNPJFilter1 = document.getElementById('clienteCNPJFilter1').value.trim();
-        const notaFilter1 = document.getElementById('notaFilter1').value.trim();
-        const dataPedidoInicioFilter1 = document.getElementById('dataPedidoInicioFilter1').value;
-        const dataPedidoFimFilter1 = document.getElementById('dataPedidoFimFilter1').value;
-        const statusFilter1 = document.getElementById('statusFilter1').value;
-
-        // Filtrando os dados
-        filteredData1 = ordersData1.filter(order => {
-            const matchRepresentante1 = !representanteFilter1 || order.Rep?.toString() === representanteFilter1;
-            const matchClienteCNPJ1 = !clienteCNPJFilter1 || order.CNPJ?.replace(/[\.\-\/]/g, '') === clienteCNPJFilter1.replace(/[\.\-\/]/g, '');
-            const matchNota1 = !notaFilter1 || order.NF?.toString() === notaFilter1;
-            const matchDataPedidoInicio1 = !dataPedidoInicioFilter1 || new Date(order.EMISSÃO) >= new Date(dataPedidoInicioFilter1);
-            const matchDataPedidoFim1 = !dataPedidoFimFilter1 || new Date(order.EMISSÃO) <= new Date(dataPedidoFimFilter1);
-
-            // Ajuste no filtro de status
-            let matchStatus1 = true;
-            if (statusFilter1 && statusFilter1 !== "2") {
-                const statusEntrega = order.STATUS_ENTREGA?.toLowerCase().trim();
-                matchStatus1 = statusEntrega === (statusFilter1 === "1" ? "entregue" : "pendente");
-            }
-
-            return matchRepresentante1 && matchClienteCNPJ1 && matchNota1 && matchDataPedidoInicio1 && matchDataPedidoFim1 && matchStatus1;
-        });
-
-        if (filteredData1.length === 0) {
-            showFeedback("Nenhum dado encontrado com os filtros aplicados.");
-        } else {
-            hideFeedback();
-        }
-
-        renderTable(filteredData1);
-    } catch (error) {
-        console.error('Erro ao aplicar filtros:', error);
-        showFeedback("Erro ao aplicar os filtros. Tente novamente.");
-    }
-}
-
-// Limpar Filtros
-function clearFilters1() {
-    document.getElementById('representanteFilter1').value = '';
-    document.getElementById('clienteCNPJFilter1').value = '';
-    document.getElementById('dataPedidoInicioFilter1').value = '';
-    document.getElementById('dataPedidoFimFilter1').value = '';
-    document.getElementById('notaFilter1').value = '';
-    document.getElementById('statusFilter1').value = "2";
-    filteredData1 = [...ordersData1]; // Redefine os dados filtrados para os dados originais
-    renderTable(ordersData1);
-    hideFeedback();
-}
-
-// Verificar se os filtros estão aplicados
-function areFiltersApplied() {
-    const representanteFilter1 = document.getElementById('representanteFilter1').value.trim();
-    const clienteCNPJFilter1 = document.getElementById('clienteCNPJFilter1').value.trim();
-    const notaFilter1 = document.getElementById('notaFilter1').value.trim();
-    const dataPedidoInicioFilter1 = document.getElementById('dataPedidoInicioFilter1').value;
-    const dataPedidoFimFilter1 = document.getElementById('dataPedidoFimFilter1').value;
-    const statusFilter1 = document.getElementById('statusFilter1').value;
-
-    return (
-        representanteFilter1 !== '' ||
-        clienteCNPJFilter1 !== '' ||
-        notaFilter1 !== '' ||
-        dataPedidoInicioFilter1 !== '' ||
-        dataPedidoFimFilter1 !== '' ||
-        statusFilter1 !== '2'
-    );
-}
-
-// Exportar para Excel (com ou sem filtros)
-document.getElementById('exportExcel1').addEventListener('click', () => {
-    if (ordersData1.length === 0) {
-        showFeedback("Nenhum dado disponível para exportar. Carregue os dados primeiro.");
-        return;
-    }
-
-    // Verifica se os filtros estão aplicados
-    const dataToExport = areFiltersApplied() ? filteredData1 : ordersData1;
-
-    if (dataToExport.length === 0) {
-        showFeedback("Nenhum dado para exportar com os filtros aplicados.");
-        return;
-    }
-
-    exportToExcel(dataToExport);
-});
-
-// Eventos dos botões de filtro
-document.getElementById('applyFilters1').addEventListener('click', applyFilters1);
-document.getElementById('clearFilters1').addEventListener('click', clearFilters1);
-
-// Função para limpar dados do usuário e redirecionar para a página de login
-document.getElementById('logoutButton1').addEventListener('click', async () => {
-    sessionStorage.clear();
-    localStorage.clear();
-
-    await fetch('/logout', { method: 'POST' });
-
-    document.cookie.split(";").forEach(cookie => {
-        document.cookie = cookie.split("=")[0] + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
-    });
-
-    window.location.href = '/login2';
-});
-
-// Função para alternar a visibilidade dos filtros
-document.getElementById('menuToggle').addEventListener('click', () => {
-    const filterContainer = document.getElementById('filterContainer');
-    const menuButton = document.getElementById('menuToggle');
-    const menuIcon = menuButton.querySelector('.menu-icon');
-
-    // Alterna a classe 'active' para mostrar/esconder os filtros
-    filterContainer.classList.toggle('active');
-
-    // Muda o ícone e o texto do botão
-    if (filterContainer.classList.contains('active')) {
-        menuIcon.textContent = '✖'; // Ícone de fechar
-        menuButton.innerHTML = `<span class="menu-icon">✖</span> Fechar Filtros`;
+    // Badge de última modificação
+    if (isAdmin) {
+      const last = rows.reduce((acc,r)=> !acc || new Date(r.modifiedAt) > new Date(acc.modifiedAt) ? r : acc, null);
+      lastModInfo.textContent = last ? `Última modificação: ${new Date(last.modifiedAt).toLocaleString('pt-BR')} por ${last.modifiedBy || '—'}` : '';
     } else {
-        menuIcon.textContent = '☰'; // Ícone de menu
-        menuButton.innerHTML = `<span class="menu-icon">☰</span> Filtros`;
+      const mine = rows.filter(r => (r.ownerKey||'').toUpperCase() === me.role.toUpperCase());
+      const last = mine.reduce((acc,r)=> !acc || new Date(r.modifiedAt) > new Date(acc.modifiedAt) ? r : acc, null);
+      lastModInfo.textContent = last ? `Sua última modificação: ${new Date(last.modifiedAt).toLocaleString('pt-BR')}` : '';
     }
-});
+
+    tableBody.innerHTML = '';
+
+    for (const row of rows) {
+      const tr = document.createElement('tr');
+
+      for (const col of headers) {
+        const td  = document.createElement('td');
+        const val = row.data?.[col] ?? '';
+
+        const podeEditar = canEditCol(col) &&
+                           (isAdmin || row.ownerKey?.toUpperCase() === me.role.toUpperCase());
+
+        if (podeEditar) {
+          const input = document.createElement('input');
+          input.type = 'text';
+          const looksNumeric = typeof val === 'number' || /^[R$ .,\d-]+$/.test(String(val || ''));
+          input.value = looksNumeric ? fmtBRL(val) : String(val);
+          input.style.width = '120px';
+
+          input.addEventListener('input', () => {
+            const patch = pending.get(row._id) || {};
+            patch[col] = looksNumeric ? parseToNumber(input.value) : input.value;
+            pending.set(row._id, patch);
+            btnSave.style.opacity = '1';
+          });
+
+          td.appendChild(input);
+        } else {
+          td.textContent = (typeof val === 'number') ? fmtBRL(val) : (val ?? '');
+        }
+        tr.appendChild(td);
+      }
+
+      // --- nova célula com a data de modificação ---
+      const tdDate = document.createElement('td');
+      tdDate.textContent = row.modifiedAt
+        ? new Date(row.modifiedAt).toLocaleString('pt-BR')
+        : '';
+      tr.appendChild(tdDate);
+
+      tableBody.appendChild(tr);
+    }
+  }
+
+  // 6) Salvar pendências (várias linhas)
+  btnSave.addEventListener('click', async () => {
+    if (pending.size === 0) return alert('Não há alterações para salvar.');
+
+    btnSave.style.pointerEvents = 'none';
+    btnSave.style.opacity = '0.5';
+
+    try {
+      const saves = [];
+      for (const [id, patch] of pending.entries()) {
+        saves.push(fetch(`/api/rows/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type':'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(patch)
+        }));
+      }
+      const resps = await Promise.all(saves);
+      const ok = resps.every(r => r.ok);
+      if (!ok) alert('Algumas linhas não foram salvas.');
+      else alert('Alterações salvas!');
+      pending.clear();
+      await render();
+    } finally {
+      btnSave.style.pointerEvents = '';
+      btnSave.style.opacity = '';
+    }
+  });
+
+  // 7) Limpar dados (admin) -> apaga TODAS as linhas
+  btnClean.addEventListener('click', async () => {
+    if (!isAdmin) return;
+    if (!confirm('Tem certeza que deseja APAGAR TODAS as linhas da tabela?')) return;
+    btnClean.style.pointerEvents = 'none';
+    btnClean.style.opacity = '0.5';
+    const r = await fetch('/api/clean', { method:'POST', credentials:'include' });
+    const js = await r.json().catch(()=>({}));
+    if (!r.ok) alert('Falha ao limpar: ' + (js.error || r.status));
+    else alert(`Tabela apagada (${js.deleted} linhas).`);
+    btnClean.style.pointerEvents = '';
+    btnClean.style.opacity = '';
+    location.reload();
+  });
+
+  await render();
+})();

@@ -1,0 +1,141 @@
+// public/logistica02.js
+(async function main(){
+  const tableHeadRow = document.querySelector('#order-table1 thead tr');
+  const tableBody    = document.querySelector('#order-table1 tbody');
+  const lastModInfo  = document.getElementById('lastModInfo');
+  const btnExport    = document.getElementById('btnExportExcel');
+  const btnImport    = document.getElementById('btnImportExcel');
+  const inpFile      = document.getElementById('fileImportExcel');
+
+  // 1) quem sou eu?
+  let me;
+  try {
+    const r = await fetch('/api/me', { credentials:'include' });
+    if (!r.ok) throw new Error('not auth');
+    me = (await r.json()).user; // {email, role, name}
+  } catch {
+    return; // o server já bloqueia e redireciona
+  }
+  const isAdmin = me.role === 'admin';
+
+  // 2) meta (headers dinâmicos)
+  const meta = await fetch('/api/meta', { credentials:'include' }).then(r=>r.json()).then(j=>j.meta);
+  const headers = meta?.headers || [];
+  const nonEditable = meta?.nonEditable || [];
+
+  // 3) renderiza thead dinamicamente (apaga qualquer th fixo do HTML)
+  tableHeadRow.innerHTML = '';
+  for (const h of headers) {
+    const th = document.createElement('th');
+    th.textContent = h;
+    tableHeadRow.appendChild(th);
+  }
+
+  // 4) botões por role
+  btnExport.style.display = isAdmin ? '' : 'none';
+  btnImport.style.display = isAdmin ? '' : 'none';
+
+  // Import/Export
+  btnExport?.addEventListener('click', () => window.location.href = '/api/export.xlsx');
+  btnImport?.addEventListener('click', () => inpFile.click());
+  inpFile?.addEventListener('change', async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const fd = new FormData(); fd.append('file', file);
+    const res = await fetch('/api/import', { method:'POST', body:fd, credentials:'include' });
+    const js  = await res.json().catch(()=>({}));
+    if (!res.ok) return alert('Falha ao importar: ' + (js.error || res.status));
+    alert('Importado com sucesso!');
+    location.reload(); // recarrega para pegar meta e dados novos
+  });
+
+  // 5) helpers
+  function fmtBRL(val){
+    if (val === null || val === undefined || val === '') return '';
+    const num = +String(val).replace(/[^\d,-]/g,'').replace(',','.');
+    if (Number.isNaN(num)) return String(val);
+    return num.toLocaleString('pt-BR',{ style:'currency', currency:'BRL' });
+  }
+  function parseToNumber(text){
+    if (!text) return '';
+    const clean = text.replace(/[^\d,-]/g,'').replace(/\.(?=\d{3})/g,'').replace(',','.');
+    const num = parseFloat(clean);
+    return Number.isFinite(num) ? num : '';
+  }
+  // coluna é editável se NÃO estiver na lista nonEditable
+  const isEditableCol = (colName) => !nonEditable.includes(colName);
+
+  // 6) carregar linhas e renderizar
+  async function loadRows() {
+    const r = await fetch('/api/rows', { credentials:'include' });
+    const js = await r.json();
+    return js.rows || [];
+  }
+
+  async function render() {
+    const rows = await loadRows();
+
+    // Badge de última modificação
+    if (isAdmin) {
+      const last = rows.reduce((acc,r)=> !acc || new Date(r.modifiedAt) > new Date(acc.modifiedAt) ? r : acc, null);
+      lastModInfo.textContent = last ? `Última modificação: ${new Date(last.modifiedAt).toLocaleString('pt-BR')} por ${last.modifiedBy || '—'}` : '';
+    } else {
+      const mine = rows.filter(r => (r.ownerKey||'').toUpperCase() === me.role.toUpperCase());
+      const last = mine.reduce((acc,r)=> !acc || new Date(r.modifiedAt) > new Date(acc.modifiedAt) ? r : acc, null);
+      lastModInfo.textContent = last ? `Sua última modificação: ${new Date(last.modifiedAt).toLocaleString('pt-BR')}` : '';
+    }
+
+    tableBody.innerHTML = '';
+
+    for (const row of rows) {
+      const tr = document.createElement('tr');
+
+      for (const col of headers) {
+        const td  = document.createElement('td');
+        const val = row.data?.[col] ?? '';
+
+        const podeEditar = isEditableCol(col) &&
+                           (isAdmin || row.ownerKey?.toUpperCase() === me.role.toUpperCase());
+
+        if (podeEditar) {
+          const input = document.createElement('input');
+          input.type = 'text';
+          // se parecer número, formatar; senão manter texto
+          const maybeNumber = typeof val === 'number' || /^[R$ .,\d-]+$/.test(String(val || ''));
+          input.value = maybeNumber ? fmtBRL(val) : String(val);
+          input.style.width = '120px';
+
+          input.addEventListener('blur', async () => {
+            const payload = {};
+            // manda SEM formatação para o backend
+            payload[col] = maybeNumber ? parseToNumber(input.value) : input.value;
+
+            const res = await fetch(`/api/rows/${row._id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type':'application/json' },
+              credentials: 'include',
+              body: JSON.stringify(payload)
+            });
+            if (!res.ok) {
+              alert('Erro ao salvar');
+            } else {
+              // reformatar
+              if (maybeNumber) input.value = fmtBRL(payload[col]);
+              // atualizar badge e demais
+              await render();
+            }
+          });
+
+          td.appendChild(input);
+        } else {
+          td.textContent = (typeof val === 'number') ? fmtBRL(val) : (val ?? '');
+        }
+        tr.appendChild(td);
+      }
+
+      tableBody.appendChild(tr);
+    }
+  }
+
+  await render();
+})();
