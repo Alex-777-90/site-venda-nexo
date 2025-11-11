@@ -19,6 +19,6 @@
       return;
     }
     // redireciona conforme o papel
-    if (data.user.role === 'admin') location.href = '/';
-    else location.href = '/';
+    if (data.user.role === 'admin') location.href = '/capa';
+    else location.href = '/capa';
   });
