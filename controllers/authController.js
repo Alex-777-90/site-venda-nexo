@@ -2,7 +2,7 @@
 const jwt = require('jsonwebtoken');
 
 const USERS = [
-  { email: 'vendas2@nexointernational.com.br', password: 'adminNexo29931', role: 'admin', name: 'Full Admin' },
+  { email: 'vendas2@nexointernational.com.br', password: 'adminNexo29931', role: 'admin', name: 'Alane' },
   { email: 'giovana@p7additives.com',       password: 'NexoP7299431',      role: 'P7',    name: 'Giovana' },
   { email: 'ncollor@ncollor.com.br',        password: 'NexoNCOLLOR299431', role: 'NCOLLOR', name: 'NCOLLOR' },
   { email: 'uira@nexointernational.com.br', password: 'NexoNDR299431',     role: 'NDR',   name: 'Uira' }

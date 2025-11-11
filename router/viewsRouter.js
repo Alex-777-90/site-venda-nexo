@@ -11,8 +11,13 @@ router.get('/login2', (req, res) => {
 
 // Home protegida (opcional — remova requireAuth se quiser pública)
 router.get('/', requireAuth, (req, res) => {
-  console.log('Rota / acessada');
+  console.log('Rota / Forecast');
   res.sendFile(path.resolve(__dirname, '..', 'views', 'index.html'));
+});
+
+router.get('/capa', requireAuth, (req, res) => {
+  console.log('Rota / Capa');
+  res.sendFile(path.resolve(__dirname, '..', 'views', 'capa.html'));
 });
 
 
