@@ -1,3 +1,10 @@
+/* ==== Colunas de mês (NOV/2025, DEZ/2025, ...) ==== */
+:root{
+  --month-col-width: 68px;     /* ajuste: 64–76 px conforme preferir */
+  --month-font-size: 12px;
+  --month-input-pad: 4px 6px;
+}
+
 @keyframes modalAnimation {
     from {
         opacity: 0;
@@ -316,6 +323,32 @@ button:hover {
     width: 100%;
     background-color: #f9f9f9;
     border-collapse: collapse;
+}
+
+/* header e células marcadas como col-month */
+#order-table1 th.col-month,
+#order-table1 td.col-month{
+  width: var(--month-col-width);
+  min-width: var(--month-col-width);
+  max-width: var(--month-col-width);
+  white-space: nowrap;
+  text-align: right;
+}
+
+/* inputs dentro das colunas de mês */
+#order-table1 td.col-month input{
+  width: calc(var(--month-col-width) - 12px);
+  min-width: calc(var(--month-col-width) - 12px);
+  max-width: calc(var(--month-col-width) - 12px);
+  text-align: right;
+  font-size: var(--month-font-size);
+  padding: var(--month-input-pad);
+}
+
+/* cabeçalho dos meses um pouco menor */
+#order-table1 th.col-month{
+  font-size: 12px;
+  padding: 6px;
 }
 
 .dataEmissao {

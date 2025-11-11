@@ -10,7 +10,7 @@
   const btnClean     = document.getElementById('btnClean');
   const inpFile      = document.getElementById('fileImportExcel');
 
-  // Filtros (corrigidos)
+  // Filtros
   const inpRep   = document.getElementById('representanteFilter1');
   const inpCli   = document.getElementById('clienteFilter1');
   const inpCNPJ  = document.getElementById('cnpjFilter1');
@@ -40,26 +40,30 @@
     return String(h ?? '');
   }
 
-  // ===== Helpers de moeda =====
- function fmtBRL(val) {
+  // coluna é "mês" se o rótulo final for MMM/AAAA (ex.: NOV/2025)
+  const isMonthHeader = (h) => /^[A-Z]{3}\/\d{4}$/.test(String(h || ''));
+
+  // ===== Helpers numéricos (sem “R$”) =====
+  function fmtBRL(val) {
     if (val === null || val === undefined || val === '') return '';
     const num = +String(val).replace(/[^\d,-]/g, '').replace(',', '.');
     if (Number.isNaN(num)) return String(val);
-
-    // Formata como número normal (sem símbolo R$)
     return num.toLocaleString('pt-BR', {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     });
- }
+  }
   function parseToNumber(text){
     if (!text) return '';
-    const clean = text.replace(/[^\d,-]/g,'').replace(/\.(?=\d{3})/g,'').replace(',','.');
+    const clean = text
+      .replace(/[^\d,-]/g,'')
+      .replace(/\.(?=\d{3})/g,'')
+      .replace(',','.');
     const num = parseFloat(clean);
     return Number.isFinite(num) ? num : '';
   }
 
-  // Helper de filtros
+  // Helpers de filtros
   const onlyDigits = (s) => String(s ?? '').replace(/\D/g, '');
   const normStr    = (s) => String(s ?? '').toUpperCase();
 
@@ -80,11 +84,13 @@
   const nonEditable = meta?.nonEditable || [];
   const canEditCol = (name) => !nonEditable.includes(name);
 
-  // 3) thead dinâmico com máscara "MMM/YYYY"
+  // 3) thead dinâmico com máscara "MMM/YYYY" e marcação de mês
   tableHeadRow.innerHTML = '';
   for (const h of headers) {
     const th = document.createElement('th');
-    th.textContent = maskHeaderToMMMYYYY(h);
+    const label = maskHeaderToMMMYYYY(h);
+    th.textContent = label;
+    if (isMonthHeader(label)) th.classList.add('col-month'); // marca colunas de mês
     tableHeadRow.appendChild(th);
   }
   // coluna extra: data modificação
@@ -110,7 +116,7 @@
     location.reload();
   });
 
-  // 5) carregar linhas (mantemos em memória para filtrar sem bater no server)
+  // 5) carregar linhas (em memória para filtros locais)
   async function loadRows() {
     const r = await fetch('/api/rows', { credentials:'include' });
     const js = await r.json();
@@ -140,11 +146,10 @@
         if (!cliente.includes(cli)) return false;
       }
 
-      // CNPJ -> coluna "Código do PN"
-      // PN vem como "C" + CNPJ (ex.: C45985371000108). Comparamos só dígitos.
+      // CNPJ -> coluna "Código do PN" (ex.: C4598537... -> comparamos apenas dígitos)
       if (cnpj) {
         const pnDigits = onlyDigits(data['Código do PN']);
-        if (!pnDigits.includes(cnpj)) return false; // pode trocar para startsWith se preferir
+        if (!pnDigits.includes(cnpj)) return false; // troque p/ startsWith se quiser
       }
 
       return true;
@@ -174,6 +179,11 @@
         const td  = document.createElement('td');
         const val = row.data?.[col] ?? '';
 
+        // rótulo "mascarado" para checar se é mês
+        const label = maskHeaderToMMMYYYY(col);
+        const ehMes = isMonthHeader(label);
+        if (ehMes) td.classList.add('col-month');
+
         const podeEditar = canEditCol(col) &&
                            (isAdmin || row.ownerKey?.toUpperCase() === me.role.toUpperCase());
 
@@ -182,7 +192,9 @@
           input.type = 'text';
           const looksNumeric = typeof val === 'number' || /^[R$ .,\d-]+$/.test(String(val || ''));
           input.value = looksNumeric ? fmtBRL(val) : String(val);
-          input.style.width = '120px';
+
+          // largura inline apenas para colunas NÃO-mês
+          if (!ehMes) input.style.width = '120px';
 
           input.addEventListener('input', () => {
             const patch = pending.get(row._id) || {};
