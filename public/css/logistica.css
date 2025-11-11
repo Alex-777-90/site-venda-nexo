@@ -57,7 +57,7 @@ body {
     color: #ffffff;
     padding: 15px;
     border-radius: 5px;
-    justify-content: space-between;
+    justify-content:space-around;
     width: 100%;
     flex-wrap: wrap;
     box-sizing: border-box;
@@ -166,12 +166,18 @@ table thead th {
     background-color: #333;
     color: #f9f9f9;
     z-index: 10; /* Ajustado para ser menor que o modal */
+    text-align: center;       /* centraliza o texto */
+    vertical-align: middle;   /* centraliza verticalmente */
+    font-weight: bold;
+    font-size: 13px;  
+
 }
 
 table th,
 table td {
     border: 1px solid #ccc;
-    padding: 10px;
+    padding: 6px;             /* diminui o espaçamento */
+    font-size: 14px;  
     text-align: left;
     background-color: #f9f9f9;
     white-space: nowrap;
