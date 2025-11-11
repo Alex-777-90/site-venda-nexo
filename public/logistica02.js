@@ -41,12 +41,17 @@
   }
 
   // ===== Helpers de moeda =====
-  function fmtBRL(val){
+ function fmtBRL(val) {
     if (val === null || val === undefined || val === '') return '';
-    const num = +String(val).replace(/[^\d,-]/g,'').replace(',','.');
+    const num = +String(val).replace(/[^\d,-]/g, '').replace(',', '.');
     if (Number.isNaN(num)) return String(val);
-    return num.toLocaleString('pt-BR',{ style:'currency', currency:'BRL' });
-  }
+
+    // Formata como número normal (sem símbolo R$)
+    return num.toLocaleString('pt-BR', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    });
+ }
   function parseToNumber(text){
     if (!text) return '';
     const clean = text.replace(/[^\d,-]/g,'').replace(/\.(?=\d{3})/g,'').replace(',','.');

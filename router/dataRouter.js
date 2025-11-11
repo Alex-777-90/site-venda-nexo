@@ -12,6 +12,7 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 }
 });
 
+
 // Colunas invariavelmente NÃO editáveis (as da esquerda)
 const BASE_NON_EDITABLE = [
   'Código do PN', 'Nome do PN', 'Cliente', 'Tipo Venda', 'Fabricante', 'Código', 'Produto',
