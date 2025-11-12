@@ -196,6 +196,37 @@ router.get('/api/export.xlsx', requireAuth, requireRole('admin'), async (req, re
   }
 });
 
+  // ---------- CRIAR (nova linha) ----------
+  router.post('/api/rows', requireAuth, async (req, res) => {
+    try {
+        const { role, email, name } = req.user;
+        const bodyData = req.body?.data || {};
+
+        // Headers atuais (para manter só campos conhecidos, se chegarem chaves extras)
+        const meta = await SheetMeta.findById('current').lean();
+        const headers = meta?.headers || [];
+
+        // Mantém apenas chaves que existem nos headers definidos
+        const data = {};
+        for (const h of headers) data[h] = bodyData[h] ?? null;
+
+        // Preenche "Usuario" automaticamente se não vier
+        if (!data['Usuario']) data['Usuario'] = (role || '').toUpperCase();
+
+        const doc = await Row.create({
+          ownerKey  : (data['Usuario'] || role || '').toUpperCase(),
+          data,
+          modifiedAt: new Date(),
+          modifiedBy: name || email
+        });
+
+        res.json({ ok:true, row: doc });
+      } catch (e) {
+        console.error(e);
+        res.status(500).json({ ok:false, error:e.message });
+      }
+  });
+
 // ---------- LIMPAR DADOS (ADMIN) -> APAGA TODAS AS LINHAS ----------
 router.post('/api/clean', requireAuth, requireRole('admin'), async (req, res) => {
   try {

@@ -9,6 +9,7 @@
   const btnSave      = document.getElementById('btnSave');
   const btnClean     = document.getElementById('btnClean');
   const inpFile      = document.getElementById('fileImportExcel');
+  const btnAdd       = document.getElementById('btnAddRow');   // << NOVO
 
   // Filtros
   const inpRep   = document.getElementById('representanteFilter1');
@@ -126,6 +127,9 @@
   let allRows = [];
   const pending = new Map();
 
+  // ===== NOVO: coleção de linhas recém-criadas (ainda sem _id) =====
+  const newRows = []; // cada item = { inputs:{header:input}, tr:<tr> }
+
   function applyFilters(rows) {
     const rep  = normStr(inpRep.value.trim());
     const cli  = normStr(inpCli.value.trim());
@@ -216,32 +220,107 @@
 
       tableBody.appendChild(tr);
     }
+
+    // Reanexa as linhas novas (caso já tenham sido criadas antes de um novo render)
+    newRows.forEach(nr => tableBody.appendChild(nr.tr));
   }
 
-  // salvar pendências
+  // ===== NOVO: Adicionar linha =====
+  btnAdd?.addEventListener('click', () => {
+    const tr = document.createElement('tr');
+    const rowObj = { inputs: {}, tr };
+
+    headers.forEach(h => {
+      const td = document.createElement('td');
+      const label = maskHeaderToMMMYYYY(h);
+      const ehMes = isMonthHeader(label);
+      if (ehMes) td.classList.add('col-month');
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      if (!ehMes) input.style.width = '120px';
+      input.placeholder = '';
+
+      rowObj.inputs[h] = input;
+      td.appendChild(input);
+      tr.appendChild(td);
+    });
+
+    // coluna "Data Modificação" (apenas visual – vazia até salvar)
+    const tdDate = document.createElement('td');
+    tdDate.textContent = '';
+    tr.appendChild(tdDate);
+
+    tableBody.appendChild(tr);
+    newRows.push(rowObj);
+
+    // destaca que há algo para salvar
+    btnSave.style.opacity = '1';
+  });
+
+  // salvar pendências (PUT) + novas (POST)
   btnSave.addEventListener('click', async () => {
-    if (pending.size === 0) return alert('Não há alterações para salvar.');
+    if (pending.size === 0 && newRows.length === 0)
+      return alert('Não há alterações para salvar.');
 
     btnSave.style.pointerEvents = 'none';
     btnSave.style.opacity = '0.5';
 
     try {
-      const saves = [];
+      const promises = [];
+
+      // 1) atualizações (PUT) já existentes
       for (const [id, patch] of pending.entries()) {
-        saves.push(fetch(`/api/rows/${id}`, {
+        promises.push(fetch(`/api/rows/${id}`, {
           method: 'PUT',
           headers: { 'Content-Type':'application/json' },
           credentials: 'include',
           body: JSON.stringify(patch)
         }));
       }
-      const resps = await Promise.all(saves);
+
+      // 2) inclusões (POST /api/rows)
+      for (const nr of newRows) {
+        const data = {};
+        for (const h of headers) {
+          const val = nr.inputs[h].value;
+
+          const label = maskHeaderToMMMYYYY(h);
+          const ehMes = isMonthHeader(label);
+
+          if (ehMes) {
+            const num = parseToNumber(val);
+            data[h] = (num === '' ? null : num);
+          } else {
+            const maybeNum = parseToNumber(val);
+            data[h] = (maybeNum === '' ? (val || null) : maybeNum);
+          }
+        }
+
+        // se o usuário não preencher "Usuario", define com o papel do login
+        if (!('Usuario' in data) || !data['Usuario']) {
+          data['Usuario'] = (me.role || '').toUpperCase();
+        }
+
+        promises.push(fetch('/api/rows', {
+          method: 'POST',
+          headers: { 'Content-Type':'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ data })
+        }));
+      }
+
+      const resps = await Promise.all(promises);
       const ok = resps.every(r => r.ok);
-      if (!ok) alert('Algumas linhas não foram salvas.');
+      if (!ok) alert('Algumas alterações não foram salvas.');
       else alert('Alterações salvas!');
+
+      // limpa estados e recarrega para pegar _id/modifiedAt/modifiedBy atualizados
       pending.clear();
-      allRows = []; // força recarregar do server para pegar modifiedAt/by atualizados
+      newRows.length = 0;
+      allRows = [];
       await render();
+
     } finally {
       btnSave.style.pointerEvents = '';
       btnSave.style.opacity = '';
