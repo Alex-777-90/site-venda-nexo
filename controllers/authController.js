@@ -2,10 +2,19 @@
 const jwt = require('jsonwebtoken');
 
 const USERS = [
+  //-- administradores
   { email: 'vendas2@nexointernational.com.br', password: 'adminNexo29931', role: 'admin', name: 'Alane' },
+  { email: 'admir@nexointernational.com.br',        password: 'NexoADMIR29931',      role: 'admin', name: 'Admir' },
+  { email: 'adm.vendas@nexointernational.com.br',   password: 'NexoADMVENDAS29931',  role: 'admin', name: 'Adm Vendas' },
+ 
+  //-- usuário comum 
   { email: 'giovana@p7additives.com',       password: 'NexoP7299431',      role: 'P7',    name: 'Giovana' },
   { email: 'ncollor@ncollor.com.br',        password: 'NexoNCOLLOR299431', role: 'NCOLLOR', name: 'NCOLLOR' },
-  { email: 'uira@nexointernational.com.br', password: 'NexoNDR299431',     role: 'NDR',   name: 'Uira' }
+  { email: 'uira@nexointernational.com.br', password: 'NexoNDR299431',     role: 'NDR',   name: 'Uira' },
+  
+    // --- NOVOS (usuário comum "AGRO") --
+  { email: 'maike@nexointernational.com.br',        password: 'NexoAGROMaike29931',  role: 'AGRO',  name: 'Maike' },
+  { email: 'fabio@nexointernational.com.br',        password: 'NexoAGROFabio29931',  role: 'AGRO',  name: 'Fabio' },
 ];
 
 function signJwt(payload) {
