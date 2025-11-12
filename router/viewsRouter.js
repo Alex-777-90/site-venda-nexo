@@ -20,6 +20,41 @@ router.get('/capa', requireAuth, (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'views', 'capa.html'));
 });
 
+router.get('/cadastroClientes', requireAuth, (req, res) => {
+  console.log('Rota / cadastroClientes');
+  res.sendFile(path.resolve(__dirname, '..', 'views', 'cadastroClientes.html'));
+});
+
+router.get('/consultaCliente', requireAuth, (req, res) => {
+  console.log('Rota / consultaCliente');
+  res.sendFile(path.resolve(__dirname, '..', 'views', 'consultaCliente.html'));
+});
+
+router.get('/consultaProduto', requireAuth, (req, res) => {
+  console.log('Rota / consultaProduto');
+  res.sendFile(path.resolve(__dirname, '..', 'views', 'consultaProduto.html'));
+});
+
+router.get('/cotacao', requireAuth, (req, res) => {
+  console.log('Rota / cotacao');
+  res.sendFile(path.resolve(__dirname, '..', 'views', 'cotacao.html'));
+});
+
+router.get('/estoqueItem', requireAuth, (req, res) => {
+  console.log('Rota / estoqueItem');
+  res.sendFile(path.resolve(__dirname, '..', 'views', 'estoqueItem.html'));
+});
+
+router.get('/listaPreco', requireAuth, (req, res) => {
+  console.log('Rota / listaPreco');
+  res.sendFile(path.resolve(__dirname, '..', 'views', 'listaPreco.html'));
+});
+
+router.get('/pedido', requireAuth, (req, res) => {
+  console.log('Rota / pedido');
+  res.sendFile(path.resolve(__dirname, '..', 'views', 'pedido.html'));
+});
+
 
 // Rota para página de erro 401 (Senha incorreta)
 router.get('/error-401', (req, res) => {

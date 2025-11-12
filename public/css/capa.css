@@ -1,0 +1,124 @@
+/* ====== FUNDO ====== */
+body {
+  height: 100vh;
+  background-image: url(/images/backgrond3.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* ====== CABEÇALHO ====== */
+.hero {
+  text-align: center;
+  color: azure;
+  padding-top: 40px;
+}
+
+.hero h2 {
+  font-size: 2em;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.hero h4 {
+  color: #cfcfcf;
+  margin-bottom: 28px; /* espaço entre o título e o menu */
+  font-weight: 400;
+  font-size: 1.1em;
+}
+
+/* ====== MENU ====== */
+.menu {
+  display: flex;
+  justify-content: center;
+  user-select: none;
+}
+
+.menu-root {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.menu-root > li {
+  position: relative;
+}
+
+.menu-root > li > a {
+  display: inline-block;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(2px);
+  transition: background 0.3s ease;
+}
+
+.menu-root > li > a:hover,
+.menu-root > li > a:focus {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+
+/* ====== SUBMENU ====== */
+.submenu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 230px;
+  padding: 8px;
+  margin: 0;
+  list-style: none;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.6); /* 🔹 borda branca */
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+  backdrop-filter: blur(4px);
+  transition: all 0.25s ease;
+}
+
+.has-sub:hover > .submenu,
+.has-sub:focus-within > .submenu {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.submenu li a {
+  display: block;
+  text-decoration: none;
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 8px;
+  transition: background 0.25s ease;
+}
+
+.submenu li a:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ====== RESPONSIVO ====== */
+@media (max-width: 720px) {
+  .menu-root {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .submenu {
+    position: static;
+    display: none;
+    margin-top: 6px;
+  }
+  .has-sub:hover > .submenu,
+  .has-sub:focus-within > .submenu {
+    display: block;
+  }
+}

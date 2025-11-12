@@ -1,12 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BEM VINDO</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BEM-VINDO</title>
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="manifest" href="/images/site.webmanifest">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <link rel="stylesheet" href="/css/capa.css" />
 </head>
 <body>
-    <H2>AQUI VAI SER A CAPA DO SITE</H2>
-    <a href="/">Forecast de vendas</a>
+  <header class="hero">
+    <h2>SEJA BEM-VINDO AO SITE-VENDAS NEXO</h2>
+    <h4>Selecione uma das opções abaixo para navegar</h4>
+
+    <!-- MENU -->
+    <nav class="menu">
+      <ul class="menu-root">
+        <!-- CLIENTE -->
+        <li class="has-sub">
+          <a href="#">Cliente</a>
+          <ul class="submenu">
+            <li><a href="/cadastroClientes">Cadastro de Cliente</a></li>
+            <li><a href="/consultaCliente">Consulta Cliente</a></li>
+          </ul>
+        </li>
+
+        <!-- VENDAS -->
+        <li class="has-sub">
+          <a href="#">Vendas</a>
+          <ul class="submenu">
+            <li><a href="/listaPrecoProduto">Lista de Preço</a></li>
+            <li><a href="/cotacao">Cotação</a></li>
+            <li><a href="/pedido">Pedido</a></li>
+          </ul>
+        </li>
+
+        <!-- ESTOQUE -->
+        <li class="has-sub">
+          <a href="#">Estoque</a>
+          <ul class="submenu">
+            <li><a href="/consultaProduto">Consulta de Produto</a></li>
+            <li><a href="/estoqueItem">Estoque do Item</a></li>
+          </ul>
+        </li>
+
+        <!-- RELATÓRIOS -->
+        <li><a href="/relatorios">Relatórios</a></li>
+
+        <!-- FORECAST -->
+        <li><a href="/">Forecast</a></li>
+      </ul>
+    </nav>
+  </header>
 </body>
 </html>
