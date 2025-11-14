@@ -531,6 +531,15 @@ button:hover {
     background-color: #c82333;
 }
 
+#lastModInfo {
+    margin-top:12px; 
+    font: weight 20px;;
+    font-size: 12px;
+    display: flex;
+    justify-content: right;
+
+}
+
 /* Media query para telas menores (celular) */
 @media (max-width: 768px) {
     .header-container {
