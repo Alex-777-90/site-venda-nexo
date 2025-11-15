@@ -532,12 +532,12 @@ button:hover {
 }
 
 #lastModInfo {
-    margin-top:12px; 
-    font: weight 20px;;
-    font-size: 12px;
-    display: flex;
-    justify-content: right;
-
+    width: 100%;
+    text-align: right;
+    margin-top: 10px;
+    padding-right: 70px;
+    font-weight: 300;
+    font-size: 12px; 
 }
 
 /* Media query para telas menores (celular) */
