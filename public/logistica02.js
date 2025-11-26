@@ -9,7 +9,7 @@
   const btnSave      = document.getElementById('btnSave');
   const btnClean     = document.getElementById('btnClean');
   const inpFile      = document.getElementById('fileImportExcel');
-  const btnAdd       = document.getElementById('btnAddRow');   // << NOVO
+  const btnAdd       = document.getElementById('btnAddRow');   // botão “Adicionar linha”
 
   // Filtros
   const inpRep   = document.getElementById('representanteFilter1');
@@ -78,6 +78,33 @@
     return;
   }
   const isAdmin = me.role === 'admin';
+
+  // ===== NOVO: grupos de acesso por papel (tem que bater com o back) =====
+  const ROLE_GROUPS = {
+    NDR: [
+      'NDR', 'UDR', 'NUTRIFEIRAS', 'VETFARMA',
+      'HF REPRESENTAÇÕES', 'RESOLPEC', 'TEC AVES', 'AGRO'
+    ],
+    AGRO: [
+      'NDR', 'UDR', 'NUTRIFEIRAS', 'VETFARMA',
+      'HF REPRESENTAÇÕES', 'RESOLPEC', 'TEC AVES', 'AGRO'
+    ]
+    // demais roles (P7, NETCOLLOR etc.) seguem a regra “só edita o próprio ownerKey”
+  };
+
+  function canEditRow(ownerKey, myRole){
+    if (!ownerKey || !myRole) return false;
+    const rowKey = String(ownerKey).toUpperCase();
+    const role   = String(myRole).toUpperCase();
+
+    if (role === 'ADMIN') return true; // só por segurança; no resto usamos isAdmin
+
+    const group = ROLE_GROUPS[role];
+    if (group) return group.includes(rowKey);
+
+    // padrão: só edita se for exatamente o mesmo ownerKey
+    return rowKey === role;
+  }
 
   // 2) meta (headers dinâmicos)
   const meta = await fetch('/api/meta', { credentials:'include' }).then(r=>r.json()).then(j=>j.meta);
@@ -168,8 +195,16 @@
     const rows = applyFilters(allRows);
 
     // Badge última modificação
-    const universe = isAdmin ? rows : rows.filter(r => (r.ownerKey||'').toUpperCase() === me.role.toUpperCase());
-    const last = universe.reduce((acc, r) => !acc || new Date(r.modifiedAt) > new Date(acc.modifiedAt) ? r : acc, null);
+    const universe = isAdmin
+      ? rows
+      : rows.filter(r => canEditRow(r.ownerKey, me.role));
+
+    const last = universe.reduce(
+      (acc, r) =>
+        !acc || new Date(r.modifiedAt) > new Date(acc.modifiedAt) ? r : acc,
+      null
+    );
+
     lastModInfo.textContent = last
       ? `${isAdmin ? 'Última modificação' : 'Sua última modificação'}: ${new Date(last.modifiedAt).toLocaleString('pt-BR')} ${last.modifiedBy ? 'por ' + last.modifiedBy : ''}`
       : '';
@@ -188,13 +223,15 @@
         const ehMes = isMonthHeader(label);
         if (ehMes) td.classList.add('col-month');
 
-        const podeEditar = canEditCol(col) &&
-                           (isAdmin || row.ownerKey?.toUpperCase() === me.role.toUpperCase());
+        const podeEditar =
+          canEditCol(col) &&
+          (isAdmin || canEditRow(row.ownerKey, me.role));
 
         if (podeEditar) {
           const input = document.createElement('input');
           input.type = 'text';
-          const looksNumeric = typeof val === 'number' || /^[R$ .,\d-]+$/.test(String(val || ''));
+          const looksNumeric =
+            typeof val === 'number' || /^[R$ .,\d-]+$/.test(String(val || ''));
           input.value = looksNumeric ? fmtBRL(val) : String(val);
 
           // largura inline apenas para colunas NÃO-mês
@@ -209,13 +246,16 @@
 
           td.appendChild(input);
         } else {
-          td.textContent = (typeof val === 'number') ? fmtBRL(val) : (val ?? '');
+          td.textContent =
+            typeof val === 'number' ? fmtBRL(val) : (val ?? '');
         }
         tr.appendChild(td);
       }
 
       const tdDate = document.createElement('td');
-      tdDate.textContent = row.modifiedAt ? new Date(row.modifiedAt).toLocaleString('pt-BR') : '';
+      tdDate.textContent = row.modifiedAt
+        ? new Date(row.modifiedAt).toLocaleString('pt-BR')
+        : '';
       tr.appendChild(tdDate);
 
       tableBody.appendChild(tr);

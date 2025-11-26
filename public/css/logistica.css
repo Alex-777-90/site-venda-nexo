@@ -184,7 +184,7 @@ table th,
 table td {
     border: 1px solid #ccc;
     padding: 6px;             /* diminui o espaçamento */
-    font-size: 12px;  
+    font-size: 11px;  
     text-align: left;
     background-color: #f9f9f9;
     white-space: nowrap;
@@ -553,7 +553,7 @@ button:hover {
 #order-table1 th:nth-child(1),
 #order-table1 td:nth-child(1) {
 
-    width: 120px;          /* ajuste o número como quiser (200, 180, 250...) */
+    width: 105px;          /* ajuste o número como quiser (200, 180, 250...) */
     max-width: 200px;
     overflow: hidden;      /* se o texto passar do limite, esconde o resto   */
     text-overflow: ellipsis; /* coloca "..." no fim se estourar              */
@@ -583,7 +583,7 @@ button:hover {
 #order-table1 th:nth-child(4),
 #order-table1 td:nth-child(4) {
 
-    width: 100px;          /* ajuste o número como quiser (200, 180, 250...) */
+    width: 90px;          /* ajuste o número como quiser (200, 180, 250...) */
     max-width: 200px;
     overflow: hidden;      /* se o texto passar do limite, esconde o resto   */
     text-overflow: ellipsis; /* coloca "..." no fim se estourar              */
@@ -594,7 +594,7 @@ button:hover {
 #order-table1 th:nth-child(5),
 #order-table1 td:nth-child(5) {
 
-    width: 120px;          /* ajuste o número como quiser (200, 180, 250...) */
+    width: 90px;          /* ajuste o número como quiser (200, 180, 250...) */
     max-width: 200px;
     overflow: hidden;      /* se o texto passar do limite, esconde o resto   */
     text-overflow: ellipsis; /* coloca "..." no fim se estourar              */
@@ -604,7 +604,7 @@ button:hover {
 #order-table1 th:nth-child(6),
 #order-table1 td:nth-child(6) {
 
-    width: 120px;          /* ajuste o número como quiser (200, 180, 250...) */
+    width: 90px;          /* ajuste o número como quiser (200, 180, 250...) */
     max-width: 200px;
     overflow: hidden;      /* se o texto passar do limite, esconde o resto   */
     text-overflow: ellipsis; /* coloca "..." no fim se estourar              */

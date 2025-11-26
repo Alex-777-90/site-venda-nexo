@@ -123,13 +123,67 @@ router.get('/api/meta', requireAuth, async (req, res) => {
   res.json({ ok:true, meta: meta || { headers: [], nonEditable: BASE_NON_EDITABLE } });
 });
 
+
+
+// Roles que podem ver mais de um ownerKey
+const ROLE_OWNERKEYS = {
+  'NDR': [
+    'NDR',
+    'UDR',
+    'NUTRIFEIRAS',
+    'VETFARMA',
+    'HF REPRESENTAÇÕES',
+    'RESOLPEC',
+    'TEC AVES'
+  ],
+  'AGRO': [
+    'UDR',
+    'NUTRIFEIRAS',
+    'VETFARMA',
+    'HF REPRESENTAÇÕES',
+    'RESOLPEC',
+    'TEC AVES'
+  ]
+  // se quiser, pode mapear outros, por ex:
+  // 'PACK 7': ['PACK 7'],
+  // 'NETCOLLOR': ['NETCOLLOR'],
+};
+
+//HELPERS ----------------------------------------------------------------------------
+function canAccessRow(user, row) {
+  // Admin edita tudo
+  if (user.role === 'admin') return true;
+
+  const allowedOwnerKeys = ROLE_OWNERKEYS[user.role];
+
+  // Se o papel tiver mapeamento (NDR, AGRO, PACK7, NETCOLLOR...)
+  if (allowedOwnerKeys && allowedOwnerKeys.length) {
+    return allowedOwnerKeys.includes(row.ownerKey);
+  }
+
+  // Papel comum: só pode mexer no que é exatamente dele
+  return row.ownerKey === user.role;
+}
+
 // ---------- LISTAR ----------
 router.get('/api/rows', requireAuth, async (req, res) => {
   const { role } = req.user;
-  const query = role === 'admin' ? {} : { ownerKey: role.toUpperCase() };
+  let query = {};
+
+  if (role !== 'admin') {
+    // pega lista de ownerKeys permitidos para esse role
+    const keys = ROLE_OWNERKEYS[role] || [role.toUpperCase()];
+
+    // garante tudo em maiúsculo
+    const upperKeys = keys.map(k => String(k).toUpperCase());
+
+    // se for só 1, pode usar direto, mas com $in funciona igual
+    query = { ownerKey: { $in: upperKeys } };
+  }
+
   const list = await Row.find(query).lean();
   res.json({ ok: true, rows: list });
-});
+})
 
 // ---------- ATUALIZAR (por ID) ----------
 router.put('/api/rows/:id', requireAuth, async (req, res) => {
@@ -149,16 +203,52 @@ router.put('/api/rows/:id', requireAuth, async (req, res) => {
     const row = await Row.findById(id);
     if (!row) return res.status(404).json({ ok:false, error:'NOT_FOUND' });
 
-    if (role !== 'admin' && row.ownerKey !== role.toUpperCase()) {
-      return res.status(403).json({ ok:false, error:'FORBIDDEN' });
+    // ===============================
+    // NOVA LÓGICA DE PERMISSÃO (EDITAR)
+    // ===============================
+
+    // Admin pode editar tudo
+    if (role === 'admin') {
+      // OK, segue adiante
+    } else {
+      // MAPA DE PERMISSÕES DOS PAPÉIS
+      const PERMS = {
+        NDR: [
+          'NDR', 'UDR', 'NUTRIFEIRAS', 'VETFARMA',
+          'HF REPRESENTAÇÕES', 'RESOLPEC', 'TEC AVES'
+        ],
+        AGRO: [
+          'UDR', 'NUTRIFEIRAS', 'VETFARMA',
+          'HF REPRESENTAÇÕES', 'RESOLPEC', 'TEC AVES'
+        ]
+      };
+
+      const normalizedRole = role.toUpperCase();
+      const allowedOwners = PERMS[normalizedRole];
+
+      if (allowedOwners) {
+        // NDR OU AGRO → podem editar várias ownersKeys
+        if (!allowedOwners.includes(row.ownerKey)) {
+          return res.status(403).json({ ok:false, error:'FORBIDDEN' });
+        }
+      } else {
+        // USUÁRIO NORMAL (ex: PACK7, NETCOLLOR)
+        if (row.ownerKey !== normalizedRole) {
+          return res.status(403).json({ ok:false, error:'FORBIDDEN' });
+        }
+      }
     }
 
+    // ===============================
+    // SE PASSOU NAS PERMISSÕES → EDITA
+    // ===============================
     row.data = { ...row.data, ...patch };
     row.modifiedAt = new Date();
     row.modifiedBy = name || email;
     await row.save();
 
     res.json({ ok:true, row });
+
   } catch (e) {
     console.error(e);
     res.status(500).json({ ok:false, error:e.message });
