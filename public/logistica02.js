@@ -3,6 +3,7 @@
   const tableHeadRow = document.querySelector('#order-table1 thead tr');
   const tableBody    = document.querySelector('#order-table1 tbody');
   const lastModInfo  = document.getElementById('lastModInfo');
+  const grandTotalEl = document.getElementById('grandTotal');
 
   const btnExport    = document.getElementById('btnExportExcel');
   const btnImport    = document.getElementById('btnImportExcel');
@@ -79,7 +80,7 @@
   }
   const isAdmin = me.role === 'admin';
 
-  // ===== NOVO: grupos de acesso por papel (tem que bater com o back) =====
+  // ===== grupos de acesso por papel (tem que bater com o back) =====
   const ROLE_GROUPS = {
     NDR: [
       'NDR', 'UDR', 'NUTRIFEIRAS', 'VETFARMA',
@@ -97,7 +98,7 @@
     const rowKey = String(ownerKey).toUpperCase();
     const role   = String(myRole).toUpperCase();
 
-    if (role === 'ADMIN') return true; // só por segurança; no resto usamos isAdmin
+    if (role === 'ADMIN') return true; // segurança extra
 
     const group = ROLE_GROUPS[role];
     if (group) return group.includes(rowKey);
@@ -108,19 +109,53 @@
 
   // 2) meta (headers dinâmicos)
   const meta = await fetch('/api/meta', { credentials:'include' }).then(r=>r.json()).then(j=>j.meta);
-  const headers = meta?.headers || [];
+  const headers = meta?.headers || [];           // headers reais (banco)
   const nonEditable = meta?.nonEditable || [];
   const canEditCol = (name) => !nonEditable.includes(name);
 
-  // 3) thead dinâmico com máscara "MMM/YYYY" e marcação de mês
-  tableHeadRow.innerHTML = '';
-  for (const h of headers) {
-    const th = document.createElement('th');
+  // ===== estrutura para incluir coluna TOTAL na visualização =====
+  const usuarioIndex = headers.findIndex(h => h === 'Usuario'); // normalmente é o último
+  const displayCols = [];  // ordem das colunas na TABELA (inclui "TOTAL")
+  const monthHeaders = []; // nomes das colunas que são meses
+
+  headers.forEach((h, idx) => {
+    // Antes de "Usuario" colocamos a coluna TOTAL
+    if (idx === usuarioIndex) {
+      displayCols.push({ kind: 'total' });
+    }
+
+    displayCols.push({ kind: 'data', key: h });
+
     const label = maskHeaderToMMMYYYY(h);
-    th.textContent = label;
-    if (isMonthHeader(label)) th.classList.add('col-month'); // marca colunas de mês
+    if (isMonthHeader(label)) {
+      monthHeaders.push(h);
+    }
+  });
+
+  // Se por algum motivo não existir "Usuario", põe TOTAL no fim
+  if (usuarioIndex === -1) {
+    displayCols.push({ kind: 'total' });
+  }
+
+  // 3) thead dinâmico com máscara "MMM/YYYY" + coluna TOTAL + Data Modificação
+  tableHeadRow.innerHTML = '';
+
+  for (const colDef of displayCols) {
+    const th = document.createElement('th');
+
+    if (colDef.kind === 'total') {
+      th.textContent = 'Total';
+      th.classList.add('col-month', 'col-total'); // numérica, estilo parecido com meses
+    } else {
+      const h = colDef.key;
+      const label = maskHeaderToMMMYYYY(h);
+      th.textContent = label;
+      if (isMonthHeader(label)) th.classList.add('col-month');
+    }
+
     tableHeadRow.appendChild(th);
   }
+
   // coluna extra: data modificação
   const thDate = document.createElement('th');
   thDate.textContent = 'Data Modificação';
@@ -154,7 +189,7 @@
   let allRows = [];
   const pending = new Map();
 
-  // ===== NOVO: coleção de linhas recém-criadas (ainda sem _id) =====
+  // linhas recém-criadas (sem _id ainda)
   const newRows = []; // cada item = { inputs:{header:input}, tr:<tr> }
 
   function applyFilters(rows) {
@@ -180,11 +215,23 @@
       // CNPJ -> coluna "Código do PN" (ex.: C4598537... -> comparamos apenas dígitos)
       if (cnpj) {
         const pnDigits = onlyDigits(data['Código do PN']);
-        if (!pnDigits.includes(cnpj)) return false; // troque p/ startsWith se quiser
+        if (!pnDigits.includes(cnpj)) return false;
       }
 
       return true;
     });
+  }
+
+  // ===== TOTAL GERAL (soma da coluna Total visível) =====
+  function updateGrandTotal() {
+    if (!grandTotalEl) return;
+    let sum = 0;
+    document.querySelectorAll('#order-table1 tbody td.col-total').forEach(td => {
+      const n = parseToNumber(td.textContent);
+      if (n !== '' && Number.isFinite(n)) sum += n;
+    });
+    grandTotalEl.textContent =
+      'Total geral: ' + (sum ? fmtBRL(sum) : '0');
   }
 
   async function render() {
@@ -214,14 +261,37 @@
     for (const row of rows) {
       const tr = document.createElement('tr');
 
-      for (const col of headers) {
+      let runningTotal = 0;           // soma das colunas de mês
+      const monthInputs = [];         // inputs de mês dessa linha (para recálculo ao digitar)
+      let tdTotal = null;             // célula da coluna TOTAL (texto, não editável)
+
+      for (const colDef of displayCols) {
+
+        // ===== COLUNA TOTAL (sintética, não existe no banco) =====
+        if (colDef.kind === 'total') {
+          tdTotal = document.createElement('td');
+          tdTotal.classList.add('col-total', 'col-month');
+          tdTotal.textContent = runningTotal ? fmtBRL(runningTotal) : '';
+          tr.appendChild(tdTotal);
+          continue;
+        }
+
+        // ===== COLUNAS REAIS (vindas do banco) =====
+        const col = colDef.key;
         const td  = document.createElement('td');
         const val = row.data?.[col] ?? '';
 
-        // rótulo "mascarado" para checar se é mês
         const label = maskHeaderToMMMYYYY(col);
         const ehMes = isMonthHeader(label);
         if (ehMes) td.classList.add('col-month');
+
+        // acumula TOTAL a partir das colunas de mês
+        if (ehMes) {
+          const nVal = (typeof val === 'number') ? val : parseToNumber(String(val));
+          if (nVal !== '' && Number.isFinite(nVal)) {
+            runningTotal += nVal;
+          }
+        }
 
         const podeEditar =
           canEditCol(col) &&
@@ -236,6 +306,9 @@
 
           // largura inline apenas para colunas NÃO-mês
           if (!ehMes) input.style.width = '120px';
+
+          // se for coluna de mês, guarda para recalcular TOTAL depois
+          if (ehMes) monthInputs.push(input);
 
           input.addEventListener('input', () => {
             const patch = pending.get(row._id) || {};
@@ -252,6 +325,25 @@
         tr.appendChild(td);
       }
 
+      // Depois de criar todas as células reais + TOTAL,
+      // liga o recálculo de TOTAL quando editar os meses
+      if (tdTotal && monthInputs.length > 0) {
+        const recalcTotal = () => {
+          let sum = 0;
+          monthInputs.forEach(inp => {
+            const n = parseToNumber(inp.value);
+            if (n !== '' && Number.isFinite(n)) sum += n;
+          });
+          tdTotal.textContent = sum ? fmtBRL(sum) : '';
+          updateGrandTotal();
+        };
+        // recálculo inicial (caso os meses tenham valor)
+        recalcTotal();
+        // recálculo toda vez que digitar num mês
+        monthInputs.forEach(inp => inp.addEventListener('input', recalcTotal));
+      }
+
+      // coluna Data Modificação
       const tdDate = document.createElement('td');
       tdDate.textContent = row.modifiedAt
         ? new Date(row.modifiedAt).toLocaleString('pt-BR')
@@ -263,9 +355,12 @@
 
     // Reanexa as linhas novas (caso já tenham sido criadas antes de um novo render)
     newRows.forEach(nr => tableBody.appendChild(nr.tr));
+
+    // Atualiza o total geral com base no que está visível
+    updateGrandTotal();
   }
 
-  // ===== NOVO: Adicionar linha =====
+  // ===== Adicionar linha =====
   btnAdd?.addEventListener('click', () => {
     const tr = document.createElement('tr');
     const rowObj = { inputs: {}, tr };
@@ -285,6 +380,12 @@
       td.appendChild(input);
       tr.appendChild(td);
     });
+
+    // coluna "Total" da linha nova (somente visual – calculada depois de salvar)
+    const tdTotal = document.createElement('td');
+    tdTotal.classList.add('col-total', 'col-month');
+    tdTotal.textContent = '';
+    tr.appendChild(tdTotal);
 
     // coluna "Data Modificação" (apenas visual – vazia até salvar)
     const tdDate = document.createElement('td');

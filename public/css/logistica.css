@@ -634,7 +634,7 @@ button:hover {
 #order-table1 th:nth-child(16),
 #order-table1 td:nth-child(16) {
 
-    width: 0px;          /* ajuste o número como quiser (200, 180, 250...) */
+    width: 140px;          /* ajuste o número como quiser (200, 180, 250...) */
     max-width: 200px;
     overflow: hidden;      /* se o texto passar do limite, esconde o resto   */
     text-overflow: ellipsis; /* coloca "..." no fim se estourar              */
@@ -644,6 +644,16 @@ button:hover {
 #order-table1 th:nth-child(17),
 #order-table1 td:nth-child(17) {
 
+    width: 0px;          /* ajuste o número como quiser (200, 180, 250...) */
+    max-width: 200px;
+    overflow: hidden;      /* se o texto passar do limite, esconde o resto   */
+    text-overflow: ellipsis; /* coloca "..." no fim se estourar              */
+    white-space: nowrap;   /* impede quebrar linha dentro da célula         */
+}
+
+#order-table1 th:nth-child(18),
+#order-table1 td:nth-child(18) {
+
     width: 140px;          /* ajuste o número como quiser (200, 180, 250...) */
     max-width: 200px;
     overflow: hidden;      /* se o texto passar do limite, esconde o resto   */
@@ -652,7 +662,27 @@ button:hover {
 }
 
 
+/* =========================
+   Coluna TOTAL
+   ========================= */
+#order-table1 th.col-total {
+  background-color: #f7931e; /* laranja */
+  color: #ffffff;
+  text-align: center;
+}
 
+/* células da coluna TOTAL */
+#order-table1 td.col-total {
+  text-align: center;
+}
+
+/* Total geral (fora da tabela) */
+.grand-total {
+  margin-top: 8px;
+  margin-bottom: 4px;
+  text-align: right;
+  font-weight: 600;
+}
 
 /* Media query para telas menores (celular) */
 @media (max-width: 768px) {
