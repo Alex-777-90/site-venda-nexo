@@ -258,9 +258,13 @@
 
                         <!-- Análise crédito -->
                         <tr>
-                            <td class="label">Necessário Análise de Crédito:</td>
+                           <td class="label">Necessário Análise de Crédito:</td>
                             <td class="field" colspan="4">
-                                <input type="text" name="analise_credito">
+                                <select name="analise_credito">
+                                    <option value="">SELECIONE</option>
+                                    <option value="Sim">Sim</option>
+                                    <option value="Não">Não</option>
+                                </select>
                             </td>
                         </tr>
 
@@ -442,8 +446,8 @@
                             </td>
 
                             <td class="label">DATA DA SOLICITAÇÃO</td>
-                            <td class="field">
-                                <input type="date" name="data_solicitacao">
+                            <td class="field date">
+                                <input  type="date" name="data_solicitacao">
                             </td>
                         </tr>
                     </tbody>
@@ -452,5 +456,29 @@
             </form>
         </div>
     </div>
+      <script>
+                    // Função para formatar a data e hora
+                    function atualizarDataHora() {
+                        const elementoData = document.querySelector('.date');
+                        const agora = new Date();
+                        const dataFormatada = agora.toLocaleDateString('pt-BR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                        });
+                        const horaFormatada = agora.toLocaleTimeString('pt-BR', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit'
+                        });
+                        elementoData.textContent = `${dataFormatada} ${horaFormatada}`;
+                        elementoData.style.fontSize="105%";
+
+                    }
+            
+                    // Chama a função inicialmente e depois a cada segundo para manter a hora atualizada
+                    atualizarDataHora();
+                    setInterval(atualizarDataHora, 1000);
+                </script>
 </body>
 </html>
