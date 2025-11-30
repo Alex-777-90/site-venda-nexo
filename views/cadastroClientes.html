@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>FO.VEN.002 - Cadastro de Cliente</title>
+
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32×32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16×16" href="/images/favicon-16x16.png">
     <link rel="manifest" href="/images/site.webmanifest">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
     <link rel="stylesheet" href="/css/cadastro-cliente.css">
 </head>
+
 <body>
     <div class="page">
         <div class="sheet">
@@ -17,7 +21,6 @@
             <!-- CABEÇALHO -->
             <header class="sheet-header">
                 <div class="header-left">
-                    <!-- Aqui depois você pode trocar pela imagem real do logo -->
                     <div class="logo-box">
                         <div class="logo-main">NEXO ADITIVOS</div>
                         <div class="logo-sub">UMA EMPRESA DO GRUPO NEXO INTERNATIONAL</div>
@@ -46,29 +49,23 @@
                 </div>
             </header>
 
-            <!-- LINHA ELABORADO / REVISADO / APROVADO -->
+            <!-- ELABORADO / REVISADO / APROVADO -->
             <section class="sign-row">
-                <div class="sign-cell">
-                    Elaborado: <span>Alane Matias</span>
-                </div>
-                <div class="sign-cell">
-                    Revisado: <span>Aline Garcia</span>
-                </div>
-                <div class="sign-cell">
-                    Aprovado: <span>Rosana Perkowitsch</span>
-                </div>
+                <div class="sign-cell">Elaborado: <span>Alane Matias</span></div>
+                <div class="sign-cell">Revisado: <span>Aline Garcia</span></div>
+                <div class="sign-cell">Aprovado: <span>Rosana Perkowitsch</span></div>
             </section>
 
-            <!-- AVISO EM VERMELHO -->
+            <!-- AVISO -->
             <div class="warning-row">
                 * PREENCHER MAIUSCULO E SEM ACENTO
             </div>
 
-            <!-- TABELA PRINCIPAL (DADOS DO CLIENTE) -->
+            <!-- FORMULÁRIO PRINCIPAL -->
             <form class="form-sheet" autocomplete="off">
 
                 <table class="form-table main-table">
-                    <!-- CONTROLE DAS LARGURAS DAS COLUNAS -->
+
                     <colgroup>
                         <col class="col-label">
                         <col class="col-field-left">
@@ -78,6 +75,8 @@
                     </colgroup>
 
                     <tbody>
+
+                        <!-- Razão Social -->
                         <tr>
                             <td class="label">Razão social:</td>
                             <td class="field" colspan="4">
@@ -85,27 +84,33 @@
                             </td>
                         </tr>
 
+                        <!-- Nome Fantasia -->
                         <tr>
                             <td class="label">Nome Fantasia:</td>
-                            <td class="field" colspan="2">
+                            <td class="field" colspan="4">
                                 <input type="text" name="nome_fantasia">
                             </td>
-                            <td class="label">Grupo:</td>
-                            <td class="field">
-                                <input type="text" name="grupo">
-                            </td>
                         </tr>
 
+                        <!-- Vendedor + Grupo COMPLETO -->
                         <tr>
                             <td class="label">Vendedor:</td>
-                            <td class="field" colspan="3">
+                            <td class="field">
                                 <input type="text" name="vendedor">
                             </td>
-                            <td class="helper-text">
-                                *Se o cliente não tiver um grupo considerar "CLIENTE"
+
+                            <td class="label">Grupo:</td>
+                            <td class="field" colspan="2">
+                                <div style="display: flex; flex-direction: column;">
+                                    <input type="text" name="grupo">
+                                    <small style="font-size: 10px; margin-top: 2px;">
+                                        *Se o cliente não tiver um grupo considerar "CLIENTE"
+                                    </small>
+                                </div>
                             </td>
                         </tr>
 
+                        <!-- CNPJ -->
                         <tr>
                             <td class="label">CNPJ:</td>
                             <td class="field">
@@ -117,6 +122,7 @@
                             </td>
                         </tr>
 
+                        <!-- Suframa -->
                         <tr>
                             <td class="label">Insc. Suframa:</td>
                             <td class="field">
@@ -128,6 +134,7 @@
                             </td>
                         </tr>
 
+                        <!-- End. Faturamento -->
                         <tr>
                             <td class="label">End. Faturamento:</td>
                             <td class="field" colspan="4">
@@ -135,28 +142,31 @@
                             </td>
                         </tr>
 
+                        <!-- CEP -->
                         <tr>
                             <td class="label">CEP:</td>
                             <td class="field">
-                                <input type="text" name="cep_faturamento">
+                                <input type="text" name="cep">
                             </td>
                             <td class="label">Bairro:</td>
                             <td class="field" colspan="2">
-                                <input type="text" name="bairro_faturamento">
+                                <input type="text" name="bairro">
                             </td>
                         </tr>
 
+                        <!-- Cidade -->
                         <tr>
                             <td class="label">Cidade:</td>
                             <td class="field">
-                                <input type="text" name="cidade_faturamento">
+                                <input type="text" name="cidade">
                             </td>
                             <td class="label">Estado:</td>
                             <td class="field" colspan="2">
-                                <input type="text" name="estado_faturamento">
+                                <input type="text" name="estado">
                             </td>
                         </tr>
 
+                        <!-- Telefone / Celular -->
                         <tr>
                             <td class="label">Telefone:</td>
                             <td class="field">
@@ -168,6 +178,7 @@
                             </td>
                         </tr>
 
+                        <!-- Contato / Email NFe -->
                         <tr>
                             <td class="label">Contato:</td>
                             <td class="field">
@@ -179,6 +190,7 @@
                             </td>
                         </tr>
 
+                        <!-- Email CP + Email Comprador -->
                         <tr>
                             <td class="label">E-mail Contas a Pagar:</td>
                             <td class="field">
@@ -190,20 +202,30 @@
                             </td>
                         </tr>
 
+                        <!-- DIVISÓRIA CRÉDITO & CONDIÇÃO -->
                         <tr>
-                            <td class="label">Necessário  Análise de Crédito:</td>
+                            <td class="section-divider" colspan="5">
+                                CRÉDITO &amp; CONDIÇÃO
+                            </td>
+                        </tr>
+
+                        <!-- Análise crédito -->
+                        <tr>
+                            <td class="label">Necessário Análise de Crédito:</td>
                             <td class="field" colspan="4">
                                 <input type="text" name="analise_credito">
                             </td>
                         </tr>
 
+                        <!-- Condição pagamento -->
                         <tr>
                             <td class="label">Condição de pagamento sugerida:</td>
                             <td class="field" colspan="4">
-                                <input type="text" name="cond_pagto_sugerida">
+                                <input type="text" name="cond_pagto">
                             </td>
                         </tr>
 
+                        <!-- Tipo cliente -->
                         <tr>
                             <td class="label">Tipo de Cliente:</td>
                             <td class="field">
@@ -211,137 +233,145 @@
                             </td>
                             <td class="label">Data da última Visita:</td>
                             <td class="field" colspan="2">
-                                <input type="date" name="data_ultima_visita">
+                                <input type="date" name="data_visita">
                             </td>
                         </tr>
 
+                        <!-- Atividade -->
                         <tr>
                             <td class="label">Principal Atividade:</td>
                             <td class="field" colspan="4">
                                 <input type="text" name="principal_atividade">
                             </td>
                         </tr>
+
                     </tbody>
                 </table>
 
                 <!-- ENDEREÇO COBRANÇA -->
                 <h2 class="section-title">Endereço Cobrança</h2>
+
                 <table class="form-table">
                     <tbody>
+
                         <tr>
                             <td class="label">Empresa:</td>
                             <td class="field">
-                                <input type="text" name="empresa_cobranca">
+                                <input type="text" name="empresa_cob">
                             </td>
                             <td class="label">CNPJ:</td>
-                            <td class="field" colspan="2">
-                                <input type="text" name="cnpj_cobranca">
+                            <td class="field">
+                                <input type="text" name="cnpj_cob">
                             </td>
                         </tr>
 
                         <tr>
                             <td class="label">Tel:</td>
                             <td class="field">
-                                <input type="text" name="tel_cobranca">
+                                <input type="text" name="tel_cob">
                             </td>
                             <td class="label">E-mail:</td>
-                            <td class="field" colspan="2">
-                                <input type="email" name="email_cobranca">
+                            <td class="field">
+                                <input type="text" name="email_cob">
                             </td>
                         </tr>
 
                         <tr>
                             <td class="label">Endereço:</td>
-                            <td class="field" colspan="4">
-                                <input type="text" name="endereco_cobranca">
+                            <td class="field" colspan="3">
+                                <input type="text" name="endereco_cob">
                             </td>
                         </tr>
 
                         <tr>
                             <td class="label">CEP:</td>
                             <td class="field">
-                                <input type="text" name="cep_cobranca">
+                                <input type="text" name="cep_cob">
                             </td>
                             <td class="label">Cidade/Estado:</td>
-                            <td class="field" colspan="2">
-                                <input type="text" name="cidade_estado_cobranca">
+                            <td class="field">
+                                <input type="text" name="cidade_estado_cob">
                             </td>
                         </tr>
+
                     </tbody>
                 </table>
 
                 <!-- ENDEREÇO ENTREGA -->
                 <h2 class="section-title">Endereço Entrega</h2>
+
                 <table class="form-table">
                     <tbody>
+
                         <tr>
                             <td class="label">Empresa:</td>
                             <td class="field">
-                                <input type="text" name="empresa_entrega">
+                                <input type="text" name="empresa_ent">
                             </td>
                             <td class="label">CNPJ:</td>
-                            <td class="field" colspan="2">
-                                <input type="text" name="cnpj_entrega">
+                            <td class="field">
+                                <input type="text" name="cnpj_ent">
                             </td>
                         </tr>
 
                         <tr>
                             <td class="label">Tel:</td>
                             <td class="field">
-                                <input type="text" name="tel_entrega">
+                                <input type="text" name="tel_ent">
                             </td>
                             <td class="label">E-mail:</td>
-                            <td class="field" colspan="2">
-                                <input type="email" name="email_entrega">
+                            <td class="field">
+                                <input type="text" name="email_ent">
                             </td>
                         </tr>
 
                         <tr>
                             <td class="label">Endereço:</td>
-                            <td class="field" colspan="4">
-                                <input type="text" name="endereco_entrega">
+                            <td class="field" colspan="3">
+                                <input type="text" name="endereco_ent">
                             </td>
                         </tr>
 
                         <tr>
                             <td class="label">CEP:</td>
                             <td class="field">
-                                <input type="text" name="cep_entrega">
+                                <input type="text" name="cep_ent">
                             </td>
                             <td class="label">Cidade/Estado:</td>
-                            <td class="field" colspan="2">
-                                <input type="text" name="cidade_estado_entrega">
+                            <td class="field">
+                                <input type="text" name="cidade_estado_ent">
                             </td>
                         </tr>
+
                     </tbody>
                 </table>
 
                 <!-- DOCUMENTOS -->
-                <h2 class="section-title documents-title">
-                    Documentos (ANEXAR UMA COPIA DE CADA)
-                </h2>
+                <h2 class="section-title">Documentos (ANEXAR UMA COPIA DE CADA)</h2>
 
                 <ul class="documents-list">
-                    <li>Contrato Social Inicial  e alterações se houver</li>
+                    <li>Contrato Social inicial e alterações</li>
                     <li>Cartão CNPJ Atualizado</li>
                     <li>Sintegra Inscrição Estadual Atualizada</li>
                     <li>Inscrição Suframa Atualizada</li>
-                    <li>Faturamento Mensal - Relação últimos 12 meses</li>
-                    <li>3 Ultimos Balanços e DRE</li>
+                    <li>Faturamento Últimos 12 meses</li>
+                    <li>3 Últimos Balanços e DRE</li>
                 </ul>
 
-                <!-- PARECER DO VENDEDOR -->
-                <h2 class="section-title parecer-title">PARECER DO VENDEDOR</h2>
+                <!-- PARECER -->
+                <h2 class="section-title">PARECER DO VENDEDOR</h2>
+
                 <div class="parecer-box">
-                    <textarea name="parecer_vendedor"></textarea>
+                    <textarea name="parecer"></textarea>
                 </div>
 
-                <!-- RODAPÉ: SOLICITANTE / DATA -->
+                <!-- RODAPÉ -->
                 <section class="footer-row">
                     <div class="footer-cell">
                         SOLICITANTE
                         <input type="text" name="solicitante">
                     </div>
+
                     <div class="footer-cell">
                         DATA DA SOLICITAÇÃO
                         <input type="date" name="data_solicitacao">

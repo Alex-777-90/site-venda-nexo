@@ -214,6 +214,17 @@ body {
     border: 1px solid #000;
 }
 
+/* DIVISÓRIA INTERNA DENTRO DA TABELA PRINCIPAL */
+
+.section-divider {
+    background: #002060;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: left;
+    padding: 3px 4px;
+    font-size: 11px;
+}
+
 /* DOCUMENTOS */
 
 .documents-title {
@@ -268,6 +279,13 @@ body {
 }
 
 /* Responsivo básico só para não quebrar demais em telas menores */
+
+@media (max-width: 1000px) {
+
+    .col-label       { width: 34%; }
+    .col-label-mid   { width: 32%; }
+}
+
 @media (max-width: 1100px) {
     .sheet {
         width: 100%;
