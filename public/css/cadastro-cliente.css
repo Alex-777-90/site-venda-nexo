@@ -1,0 +1,294 @@
+/* Fonte e fundo geral em "cara de Excel" */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    background: #d9d9d9;
+    font-family: Calibri, Arial, sans-serif;
+}
+
+/* “Folha” centralizada */
+.page {
+    display: flex;
+    justify-content: center;
+}
+
+.sheet {
+    width: 1050px;
+    background: #ffffff;
+    border: 1px solid #000000;
+    padding: 10px 15px 20px;
+}
+
+/* CABEÇALHO */
+
+.sheet-header {
+    display: grid;
+    grid-template-columns: 1.2fr 1.6fr 1fr;
+    align-items: center;
+    border-bottom: 1px solid #000;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo-box {
+    border: 1px solid #000;
+    padding: 8px 10px;
+    width: 210px;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.logo-main {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.logo-sub {
+    font-size: 9px;
+    margin-top: 4px;
+}
+
+.header-center {
+    text-align: center;
+}
+
+.header-center h1 {
+    font-size: 16px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.header-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.meta-table {
+    border-collapse: collapse;
+    font-size: 10px;
+}
+
+.meta-table td {
+    border: 1px solid #000;
+    padding: 2px 6px;
+}
+
+.meta-label {
+    font-weight: bold;
+}
+
+/* LINHA ELABORADO / REVISADO / APROVADO */
+
+.sign-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 5px 0 3px;
+    font-size: 10px;
+}
+
+.sign-cell {
+    border: 1px solid #000;
+    padding: 3px 4px;
+}
+
+.sign-cell span {
+    font-weight: bold;
+}
+
+/* AVISO EM VERMELHO */
+
+.warning-row {
+    margin-top: 4px;
+    margin-bottom: 8px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: #c00000;
+    border: 1px solid #000;
+    padding: 2px 0;
+}
+
+/* TABELAS PRINCIPAIS */
+
+.form-sheet {
+    width: 100%;
+}
+
+/* Tabela de campos – imitando as células azuis da planilha */
+.form-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 6px;
+    font-size: 11px;
+}
+
+.form-table td {
+    border: 1px solid #000;
+    padding: 2px 4px;
+}
+
+/* Células de rótulo: azul escuro, texto branco */
+.label {
+    background: #002060;        /* mesma cor que B8 na planilha */
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+/* Células de texto auxiliar (ex: “*Se o cliente...” ) */
+.helper-text {
+    font-size: 9px;
+    padding-left: 6px;
+}
+
+/* Células de campo (input) */
+.field {
+    background: #ffffff;
+}
+
+.field input,
+.parecer-box textarea,
+.footer-row input {
+    width: 100%;
+    border: none;
+    padding: 3px;
+    font-family: inherit;
+    font-size: 11px;
+    text-transform: uppercase;  /* ajuda a seguir o “MAIÚSCULO” */
+}
+
+/* tira contorno feio */
+.field input:focus,
+.parecer-box textarea:focus,
+.footer-row input:focus {
+    outline: none;
+}
+
+/* ===== LARGURAS DA TABELA PRINCIPAL (IGUAL “COLUNAS” DO EXCEL) ===== */
+
+.main-table {
+    table-layout: fixed;
+}
+
+/* colgroup da tabela principal */
+.col-label {
+    width: 18%;    /* label azul esquerda */
+}
+
+.col-field-left {
+    width: 32%;    /* campo branco esquerda */
+}
+
+.col-label-mid {
+    width: 14%;    /* label azul direita */
+}
+
+.col-field-right {
+    width: 26%;    /* campo branco direita */
+}
+
+.col-helper {
+    width: 10%;    /* coluna do texto de aviso */
+}
+
+/* TÍTULOS “ENDEREÇO COBRANÇA / ENTREGA / DOCUMENTOS / PARECER” */
+
+.section-title {
+    margin: 10px 0 0;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: left;
+    background: #002060;
+    color: #ffffff;
+    padding: 3px 4px;
+    border: 1px solid #000;
+}
+
+/* DOCUMENTOS */
+
+.documents-title {
+    margin-top: 12px;
+}
+
+.documents-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0 0 5px;
+    font-size: 10px;
+}
+
+.documents-list li {
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+    padding: 2px 4px;
+}
+
+/* PARECER DO VENDEDOR */
+
+.parecer-title {
+    margin-top: 12px;
+}
+
+.parecer-box {
+    border: 1px solid #000;
+    border-top: none;
+    height: 120px;
+}
+
+.parecer-box textarea {
+    width: 100%;
+    height: 100%;
+    resize: none;
+}
+
+/* RODAPÉ – SOLICITANTE / DATA */
+
+.footer-row {
+    display: grid;
+    grid-template-columns: 1.3fr 1.3fr;
+    margin-top: 18px;
+    column-gap: 20px;
+    font-size: 10px;
+}
+
+.footer-cell {
+    border-top: 1px solid #000;
+    padding-top: 4px;
+}
+
+/* Responsivo básico só para não quebrar demais em telas menores */
+@media (max-width: 1100px) {
+    .sheet {
+        width: 100%;
+    }
+}
+
+@media (max-width: 800px) {
+    .sheet-header {
+        grid-template-columns: 1fr;
+        row-gap: 8px;
+    }
+
+    .header-right {
+        justify-content: flex-start;
+    }
+
+    .sign-row {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-row {
+        grid-template-columns: 1fr;
+    }
+}

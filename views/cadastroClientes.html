@@ -1,11 +1,355 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>FO.VEN.002 - Cadastro de Cliente</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="manifest" href="/images/site.webmanifest">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="/css/cadastro-cliente.css">
 </head>
 <body>
-    
+    <div class="page">
+        <div class="sheet">
+
+            <!-- CABEÇALHO -->
+            <header class="sheet-header">
+                <div class="header-left">
+                    <!-- Aqui depois você pode trocar pela imagem real do logo -->
+                    <div class="logo-box">
+                        <div class="logo-main">NEXO ADITIVOS</div>
+                        <div class="logo-sub">UMA EMPRESA DO GRUPO NEXO INTERNATIONAL</div>
+                    </div>
+                </div>
+
+                <div class="header-center">
+                    <h1>CADASTRO DE CLIENTE</h1>
+                </div>
+
+                <div class="header-right">
+                    <table class="meta-table">
+                        <tr>
+                            <td class="meta-label">CÓDIGO</td>
+                            <td class="meta-value">FO.VEN.002</td>
+                        </tr>
+                        <tr>
+                            <td class="meta-label">REV.</td>
+                            <td class="meta-value">00</td>
+                        </tr>
+                        <tr>
+                            <td class="meta-label">DATA</td>
+                            <td class="meta-value">30/09/2025</td>
+                        </tr>
+                    </table>
+                </div>
+            </header>
+
+            <!-- LINHA ELABORADO / REVISADO / APROVADO -->
+            <section class="sign-row">
+                <div class="sign-cell">
+                    Elaborado: <span>Alane Matias</span>
+                </div>
+                <div class="sign-cell">
+                    Revisado: <span>Aline Garcia</span>
+                </div>
+                <div class="sign-cell">
+                    Aprovado: <span>Rosana Perkowitsch</span>
+                </div>
+            </section>
+
+            <!-- AVISO EM VERMELHO -->
+            <div class="warning-row">
+                * PREENCHER MAIUSCULO E SEM ACENTO
+            </div>
+
+            <!-- TABELA PRINCIPAL (DADOS DO CLIENTE) -->
+            <form class="form-sheet" autocomplete="off">
+
+                <table class="form-table main-table">
+                    <!-- CONTROLE DAS LARGURAS DAS COLUNAS -->
+                    <colgroup>
+                        <col class="col-label">
+                        <col class="col-field-left">
+                        <col class="col-label-mid">
+                        <col class="col-field-right">
+                        <col class="col-helper">
+                    </colgroup>
+
+                    <tbody>
+                        <tr>
+                            <td class="label">Razão social:</td>
+                            <td class="field" colspan="4">
+                                <input type="text" name="razao_social">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">Nome Fantasia:</td>
+                            <td class="field" colspan="2">
+                                <input type="text" name="nome_fantasia">
+                            </td>
+                            <td class="label">Grupo:</td>
+                            <td class="field">
+                                <input type="text" name="grupo">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">Vendedor:</td>
+                            <td class="field" colspan="3">
+                                <input type="text" name="vendedor">
+                            </td>
+                            <td class="helper-text">
+                                *Se o cliente não tiver um grupo considerar "CLIENTE"
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">CNPJ:</td>
+                            <td class="field">
+                                <input type="text" name="cnpj">
+                            </td>
+                            <td class="label">Inscr.Estadual:</td>
+                            <td class="field" colspan="2">
+                                <input type="text" name="insc_estadual">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">Insc. Suframa:</td>
+                            <td class="field">
+                                <input type="text" name="insc_suframa">
+                            </td>
+                            <td class="label">Segmento</td>
+                            <td class="field" colspan="2">
+                                <input type="text" name="segmento">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">End. Faturamento:</td>
+                            <td class="field" colspan="4">
+                                <input type="text" name="end_faturamento">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">CEP:</td>
+                            <td class="field">
+                                <input type="text" name="cep_faturamento">
+                            </td>
+                            <td class="label">Bairro:</td>
+                            <td class="field" colspan="2">
+                                <input type="text" name="bairro_faturamento">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">Cidade:</td>
+                            <td class="field">
+                                <input type="text" name="cidade_faturamento">
+                            </td>
+                            <td class="label">Estado:</td>
+                            <td class="field" colspan="2">
+                                <input type="text" name="estado_faturamento">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">Telefone:</td>
+                            <td class="field">
+                                <input type="text" name="telefone">
+                            </td>
+                            <td class="label">Celular:</td>
+                            <td class="field" colspan="2">
+                                <input type="text" name="celular">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">Contato:</td>
+                            <td class="field">
+                                <input type="text" name="contato">
+                            </td>
+                            <td class="label">E-mail para NFe:</td>
+                            <td class="field" colspan="2">
+                                <input type="email" name="email_nfe">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">E-mail Contas a Pagar:</td>
+                            <td class="field">
+                                <input type="email" name="email_cp">
+                            </td>
+                            <td class="label">E-mail Comprador:</td>
+                            <td class="field" colspan="2">
+                                <input type="email" name="email_comprador">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">Necessário  Análise de Crédito:</td>
+                            <td class="field" colspan="4">
+                                <input type="text" name="analise_credito">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">Condição de pagamento sugerida:</td>
+                            <td class="field" colspan="4">
+                                <input type="text" name="cond_pagto_sugerida">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">Tipo de Cliente:</td>
+                            <td class="field">
+                                <input type="text" name="tipo_cliente">
+                            </td>
+                            <td class="label">Data da última Visita:</td>
+                            <td class="field" colspan="2">
+                                <input type="date" name="data_ultima_visita">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">Principal Atividade:</td>
+                            <td class="field" colspan="4">
+                                <input type="text" name="principal_atividade">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- ENDEREÇO COBRANÇA -->
+                <h2 class="section-title">Endereço Cobrança</h2>
+                <table class="form-table">
+                    <tbody>
+                        <tr>
+                            <td class="label">Empresa:</td>
+                            <td class="field">
+                                <input type="text" name="empresa_cobranca">
+                            </td>
+                            <td class="label">CNPJ:</td>
+                            <td class="field" colspan="2">
+                                <input type="text" name="cnpj_cobranca">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">Tel:</td>
+                            <td class="field">
+                                <input type="text" name="tel_cobranca">
+                            </td>
+                            <td class="label">E-mail:</td>
+                            <td class="field" colspan="2">
+                                <input type="email" name="email_cobranca">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">Endereço:</td>
+                            <td class="field" colspan="4">
+                                <input type="text" name="endereco_cobranca">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">CEP:</td>
+                            <td class="field">
+                                <input type="text" name="cep_cobranca">
+                            </td>
+                            <td class="label">Cidade/Estado:</td>
+                            <td class="field" colspan="2">
+                                <input type="text" name="cidade_estado_cobranca">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- ENDEREÇO ENTREGA -->
+                <h2 class="section-title">Endereço Entrega</h2>
+                <table class="form-table">
+                    <tbody>
+                        <tr>
+                            <td class="label">Empresa:</td>
+                            <td class="field">
+                                <input type="text" name="empresa_entrega">
+                            </td>
+                            <td class="label">CNPJ:</td>
+                            <td class="field" colspan="2">
+                                <input type="text" name="cnpj_entrega">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">Tel:</td>
+                            <td class="field">
+                                <input type="text" name="tel_entrega">
+                            </td>
+                            <td class="label">E-mail:</td>
+                            <td class="field" colspan="2">
+                                <input type="email" name="email_entrega">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">Endereço:</td>
+                            <td class="field" colspan="4">
+                                <input type="text" name="endereco_entrega">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">CEP:</td>
+                            <td class="field">
+                                <input type="text" name="cep_entrega">
+                            </td>
+                            <td class="label">Cidade/Estado:</td>
+                            <td class="field" colspan="2">
+                                <input type="text" name="cidade_estado_entrega">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- DOCUMENTOS -->
+                <h2 class="section-title documents-title">
+                    Documentos (ANEXAR UMA COPIA DE CADA)
+                </h2>
+
+                <ul class="documents-list">
+                    <li>Contrato Social Inicial  e alterações se houver</li>
+                    <li>Cartão CNPJ Atualizado</li>
+                    <li>Sintegra Inscrição Estadual Atualizada</li>
+                    <li>Inscrição Suframa Atualizada</li>
+                    <li>Faturamento Mensal - Relação últimos 12 meses</li>
+                    <li>3 Ultimos Balanços e DRE</li>
+                </ul>
+
+                <!-- PARECER DO VENDEDOR -->
+                <h2 class="section-title parecer-title">PARECER DO VENDEDOR</h2>
+                <div class="parecer-box">
+                    <textarea name="parecer_vendedor"></textarea>
+                </div>
+
+                <!-- RODAPÉ: SOLICITANTE / DATA -->
+                <section class="footer-row">
+                    <div class="footer-cell">
+                        SOLICITANTE
+                        <input type="text" name="solicitante">
+                    </div>
+                    <div class="footer-cell">
+                        DATA DA SOLICITAÇÃO
+                        <input type="date" name="data_solicitacao">
+                    </div>
+                </section>
+
+            </form>
+        </div>
+    </div>
 </body>
 </html>
