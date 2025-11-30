@@ -96,7 +96,20 @@
                         <tr>
                             <td class="label">Vendedor:</td>
                             <td class="field">
-                                <input type="text" name="vendedor">
+                                <select name="vendedor">
+                                    <option value="">SELECIONE</option>
+                                    <option value="HF REPRESENTAÇÕES">HF REPRESENTAÇÕES</option>
+                                    <option value="NDR">NDR</option>
+                                    <option value="NETCOLLOR">NETCOLLOR</option>
+                                    <option value="NUTRIFEIRAS">NUTRIFEIRAS</option>
+                                    <option value="PACK 7">PACK 7</option>
+                                    <option value="RESOLPEC">RESOLPEC</option>
+                                    <option value="SEM VENDEDOR">SEM VENDEDOR</option>
+                                    <option value="TECAVES">TECAVES</option>
+                                    <option value="UDR">UDR</option>
+                                    <option value="VETFARMA">VETFARMA</option>
+                                    <option value="YUZI - TS E RM">YUZI - TS E RM</option>
+                                </select>
                             </td>
 
                             <td class="label">Grupo:</td>
@@ -122,7 +135,7 @@
                             </td>
                         </tr>
 
-                        <!-- Suframa -->
+                        <!-- Suframa + Segmento -->
                         <tr>
                             <td class="label">Insc. Suframa:</td>
                             <td class="field">
@@ -130,7 +143,41 @@
                             </td>
                             <td class="label">Segmento</td>
                             <td class="field" colspan="2">
-                                <input type="text" name="segmento">
+                                <select name="segmento">
+                                    <option value="">SELECIONE</option>
+                                    <option value="Agricultura">Agricultura</option>
+                                    <option value="Borracha">Borracha</option>
+                                    <option value="Calçadista">Calçadista</option>
+                                    <option value="Ceras e Emulsões">Ceras e Emulsões</option>
+                                    <option value="Coating - Tinta">Coating - Tinta</option>
+                                    <option value="Compostos - Automotivo">Compostos - Automotivo</option>
+                                    <option value="Compostos - Fios e Cabos">Compostos - Fios e Cabos</option>
+                                    <option value="Compostos - Outros">Compostos - Outros</option>
+                                    <option value="Compostos - Plático de Engenharia">Compostos - Plático de Engenharia</option>
+                                    <option value="Compostos - Tubos/Pipe">Compostos - Tubos/Pipe</option>
+                                    <option value="Distribuidor / Revenda">Distribuidor / Revenda</option>
+                                    <option value="Emb. Rígidas e Flexíveis - PP e PE">Emb. Rígidas e Flexíveis - PP e PE</option>
+                                    <option value="Emb. Rígidas e Flexíveis - PVC">Emb. Rígidas e Flexíveis - PVC</option>
+                                    <option value="Expandido - XPS/EPS">Expandido - XPS/EPS</option>
+                                    <option value="Extrusão Chapa/Outros">Extrusão Chapa/Outros</option>
+                                    <option value="Extrusão Fibra/Multifilamento - Fibra de  Poliamida">Extrusão Fibra/Multifilamento - Fibra de  Poliamida</option>
+                                    <option value="Extrusão Fibra/Multifilamento - Fibra de PET">Extrusão Fibra/Multifilamento - Fibra de PET</option>
+                                    <option value="Extrusão Fibra/Multifilamento - Polipropileno">Extrusão Fibra/Multifilamento - Polipropileno</option>
+                                    <option value="Extrusão Rafia -  Polipropileno e Polietileno">Extrusão Rafia -  Polipropileno e Polietileno</option>
+                                    <option value="Feed">Feed</option>
+                                    <option value="Food">Food</option>
+                                    <option value="Fornecedor/Prestador de Serviço">Fornecedor/Prestador de Serviço</option>
+                                    <option value="Hotmelt - Adesivos">Hotmelt - Adesivos</option>
+                                    <option value="Lubricantes">Lubricantes</option>
+                                    <option value="Masterbatch">Masterbatch</option>
+                                    <option value="Moldagem por Injeção">Moldagem por Injeção</option>
+                                    <option value="Moldagem por Injeção  - Plástico de Engenharia">Moldagem por Injeção  - Plástico de Engenharia</option>
+                                    <option value="Outro segmento">Outro segmento</option>
+                                    <option value="Petroquimica">Petroquimica</option>
+                                    <option value="Reciclagem">Reciclagem</option>
+                                    <option value="Rotomoldagem">Rotomoldagem</option>
+                                    <option value="TPU">TPU</option>
+                                </select>
                             </td>
                         </tr>
 
@@ -227,9 +274,15 @@
 
                         <!-- Tipo cliente -->
                         <tr>
-                            <td class="label">Tipo de Cliente:</td>
+                           <td class="label">Tipo de Cliente:</td>
                             <td class="field">
-                                <input type="text" name="tipo_cliente">
+                                <select name="tipo_cliente">
+                                    <option value="">SELECIONE</option>
+                                    <option value="Consumidor Final">Consumidor Final</option>
+                                    <option value="Distribuidor">Distribuidor</option>
+                                    <option value="Produtor">Produtor</option>
+                                    <option value="Revenda">Revenda</option>
+                                </select>
                             </td>
                             <td class="label">Data da última Visita:</td>
                             <td class="field" colspan="2">
@@ -366,17 +419,35 @@
                 </div>
 
                 <!-- RODAPÉ -->
-                <section class="footer-row">
-                    <div class="footer-cell">
-                        SOLICITANTE
-                        <input type="text" name="solicitante">
-                    </div>
+                <table class="form-table footer-table">
+                    <tbody>
+                        <tr>
+                            <td class="label">SOLICITANTE</td>
+                            <td class="field">
+                                <select name="solicitante">
+                                    <option value="">SELECIONE</option>
+                                    <option value="André">André</option>
+                                    <option value="Cristina">Cristina</option>
+                                    <option value="Denise">Denise</option>
+                                    <option value="Fabiana">Fabiana</option>
+                                    <option value="Fábio">Fábio</option>
+                                    <option value="Giovana">Giovana</option>
+                                    <option value="Edenir">Edenir</option>
+                                    <option value="Maike">Maike</option>
+                                    <option value="Paulo">Paulo</option>
+                                    <option value="Rubens">Rubens</option>
+                                    <option value="Uirá">Uirá</option>
+                                    <option value="Yuzi">Yuzi</option>
+                                </select>
+                            </td>
 
-                    <div class="footer-cell">
-                        DATA DA SOLICITAÇÃO
-                        <input type="date" name="data_solicitacao">
-                    </div>
-                </section>
+                            <td class="label">DATA DA SOLICITAÇÃO</td>
+                            <td class="field">
+                                <input type="date" name="data_solicitacao">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
             </form>
         </div>

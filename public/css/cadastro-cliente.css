@@ -157,6 +157,7 @@ body {
 }
 
 .field input,
+.field select,
 .parecer-box textarea,
 .footer-row input {
     width: 100%;
@@ -169,6 +170,7 @@ body {
 
 /* tira contorno feio */
 .field input:focus,
+.field select:focus,
 .parecer-box textarea:focus,
 .footer-row input:focus {
     outline: none;
