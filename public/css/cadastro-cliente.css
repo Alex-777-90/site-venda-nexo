@@ -10,6 +10,10 @@ body {
     font-family: Calibri, Arial, sans-serif;
 }
 
+.img_link {
+    width: 92%;
+}
+
 /* “Folha” centralizada */
 .page {
     display: flex;
