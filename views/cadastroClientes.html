@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FO.VEN.002 - Cadastro de Cliente</title>
 
     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
@@ -10,11 +11,94 @@
     <link rel="manifest" href="/images/site.webmanifest">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
 
     <link rel="stylesheet" href="/css/cadastro-cliente.css">
 </head>
 
 <body>
+
+     <div class="container">
+        <div id="customModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                    <h2>Aviso!</h2>
+                    <p>Você deseja realmente enviar o e-mail?</p>
+                    <button id="confirmButton">Sim</button>
+                    <button id="cancelButton">Não</button>
+        </div>
+    </div>
+
+     <div id="customModal1" class="modal1">
+        <div class="modal-content1">
+            <span class="close-button1">&times;</span>
+            <h2>Aviso!</h2>
+            <p>Você deseja realmente enviar o e-mail?</p>
+            <button id="confirmButton1">Sim</button>
+            <button id="cancelButton1">Não</button>
+        </div>
+    </div>
+
+      <!-- Novo modal para aviso de limite de tamanho -->
+    <div id="sizeLimitModal" class="modal1">
+        <div class="modal-content1">
+            <span class="close-button1">&times;</span>
+            <h2>Aviso!</h2>
+            <p id="sizeLimitMessage"></p>
+            <button id="sizeLimitOkButton">OK</button>
+        </div>
+    </div>
+
+    <div id="blockModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Aviso!</h2>
+            <p>Por favor enviar o pedido para o sistema para liberar um novo cadastro.</p>
+            <p id="timestamp"></p>
+            <button id="okButton">OK</button>
+        </div>
+    </div>
+
+     <!-- Modal de E-mail -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content email-modal-content">
+            <span class="close-button email-close-button">&times;</span>
+            <h2>Enviar E-mail</h2>
+            <form id="emailForm" class="email-form">
+                <div class="email-field">
+                    <label for="emailTo">Para:</label>
+                    <input type="email" id="emailTo" placeholder="Digite o e-mail do destinatário" required readonly>
+                </div>
+                <div class="email-field tooltip">
+                    <label for="emailCc">Cc:</label>
+                    <input type="email" id="emailCc" placeholder="Digite o e-mail para cópia">
+                    <span class="tooltiptext">Colocar " ; " para separar os e-mails</span>
+                </div>
+                <div class="email-field">
+                    <label for="emailSubject">Assunto:</label>
+                    <input type="text" id="emailSubject" placeholder="Digite o assunto" required readonly>
+                </div>
+                <div class="email-field">
+                    <label for="emailBody">Mensagem:</label>
+                    <textarea id="emailBody" placeholder="Digite sua mensagem" rows="10" required></textarea>
+                </div>
+                <div class="email-field attachment-wrapper">
+                    <label for="emailAttachment">Anexar Arquivo:</label>
+                    <input type="file" id="emailAttachment" multiple>
+                    <div id="attachmentTooltip" class="attachment-tooltip">
+                        <ul id="attachmentList"></ul>
+                        <!-- Novo elemento para mostrar o tamanho total -->
+                        <p id="totalSizeDisplay" style="margin-top: 10px; font-weight: bold;">Tamanho total: 0 MB</p>
+                    </div>
+                </div>
+                <div class="email-buttons">
+                    <button type="button" id="sendEmailButton">Enviar</button>
+                    <button type="button" id="cancelEmailButton">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="page">
         <div class="sheet">
 
@@ -454,9 +538,20 @@
                     </tbody>
                 </table>
 
+                <div class="button-group">
+                   <button id="button_pdf">ENVIAR E-MAIL COM ANEXOS</button>
+                </div>
+                <div id="feedback1" style="display: none; text-align: center; font-weight: bold; margin: 10px; color: red;">
+                    Estamos enviando o e-mail, aguarde...
+                </div>
+
+               
+
             </form>
         </div>
     </div>
+
+    <script src="/cadastroClientes.js"></script>
       <script>
                     // Função para formatar a data e hora
                     function atualizarDataHora() {
