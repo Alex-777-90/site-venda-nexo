@@ -11,6 +11,7 @@ const USERS = [
   { email: 'giovana@p7additives.com',       password: 'NexoP7299431',      role: 'PACK 7',    name: 'Giovana' },
   { email: 'ncollor@ncollor.com.br',        password: 'NexoNCOLLOR299431', role: 'NETCOLLOR', name: 'NCOLLOR' },
   { email: 'uira@nexointernational.com.br', password: 'NexoNDR299431',     role: 'NDR',   name: 'Uira' },
+  { email:'qualidade@nexointernational.com.br', password:'NExoQuality29931', role:'QUALIDADE' , name:'Jaqueline'},
   
     // --- NOVOS (usuário comum "AGRO") --
   { email: 'maike@nexointernational.com.br',        password: 'NexoAGROMaike29931',  role: 'AGRO',  name: 'Maike' },
