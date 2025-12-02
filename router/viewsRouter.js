@@ -55,6 +55,12 @@ router.get('/pedido', requireAuth, (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'views', 'pedido.html'));
 });
 
+router.get('/relatorio', requireAuth, (req, res) => {
+  console.log('Rota / pedido');
+  res.sendFile(path.resolve(__dirname, '..', 'views', 'dashboard.html'));
+});
+
+
 
 // Rota para página de erro 401 (Senha incorreta)
 router.get('/error-401', (req, res) => {
