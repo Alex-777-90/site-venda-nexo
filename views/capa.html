@@ -15,7 +15,7 @@
 </head>
 <body>
   <header class="hero">
-    <h2>SEJA BEM-VINDO AO SITE-VENDAS NEXO</h2>
+    <h2>CRM NEXO</h2>
     <h4>Selecione uma das opções abaixo para navegar</h4>
 
     <!-- MENU -->
@@ -68,7 +68,23 @@
         <!-- FORECAST -->
         <li><a target="_blank" href="https://alex-777-90.github.io/simulador-frete/">Simulador de Frete</a></li>
       </ul>
+      <button id="logoutButton1">Sair</button>
     </nav>
+    
   </header>
+    <!-- Script de logout -->
+  <script>
+    async function logoutUser() {
+      try {
+        const res = await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+        if (res.ok) window.location.href = '/login2';
+        else alert('Erro ao sair. Tente novamente.');
+      } catch (err) {
+        console.error('Erro no logout:', err);
+        alert('Erro de conexão ao sair.');
+      }
+    }
+    document.getElementById('logoutButton1').addEventListener('click', logoutUser);
+  </script>
 </body>
 </html>

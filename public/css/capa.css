@@ -105,6 +105,21 @@ body {
 .submenu li a:hover {
   background: rgba(255, 255, 255, 0.1);
 }
+#logoutButton1{
+  color: rgb(238, 238, 240);
+  background-color: rgb(7, 130, 245);
+  border: none;
+  width: 7%;
+  margin-left: 10px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+#logoutButton1:hover{
+   background-color: rgb(238, 240, 241);
+   color: rgb(7, 130, 245);
+}
+
 
 /* ====== RESPONSIVO ====== */
 @media (max-width: 720px) {
