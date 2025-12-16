@@ -60,6 +60,11 @@ router.get('/relatorio', requireAuth, (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'views', 'dashboard.html'));
 });
 
+router.get('/cadastroRepresentante', requireAuth, (req, res) => {
+  console.log('Rota / representante');
+  res.sendFile(path.resolve(__dirname, '..', 'views', 'cadastroRepresentante.html'));
+});
+
 
 
 // Rota para página de erro 401 (Senha incorreta)
