@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const { requireAuth } = require('../middleware/authMiddleware');
+const { requireAuth, requireRole } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -60,11 +60,15 @@ router.get('/relatorio', requireAuth, (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'views', 'dashboard.html'));
 });
 
-router.get('/cadastroRepresentante', requireAuth, (req, res) => {
-  console.log('Rota / representante');
-  res.sendFile(path.resolve(__dirname, '..', 'views', 'cadastroRepresentante.html'));
-});
-
+router.get(
+  '/cadastroRepresentante',
+  requireAuth,
+  requireRole(['admin', 'NDR', 'AGRO']),
+  (req, res) => {
+    console.log('Rota / cadastroRepresentante');
+    res.sendFile(path.resolve(__dirname, '..', 'views', 'cadastroRepresentante.html'));
+  }
+);
 
 
 // Rota para página de erro 401 (Senha incorreta)

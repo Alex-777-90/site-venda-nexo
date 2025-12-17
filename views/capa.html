@@ -13,6 +13,27 @@
 
   <link rel="stylesheet" href="/css/capa.css" />
 </head>
+
+  <script>
+      (async () => {
+        try {
+          const res = await fetch('/api/me', { credentials: 'include' });
+          if (!res.ok) return;
+
+          const data = await res.json();
+          const role = data.user.role;
+
+          const allowedRoles = ['admin', 'NDR', 'AGRO'];
+          const menuItem = document.getElementById('menuCadastroRepresentante');
+
+          if (!allowedRoles.includes(role)) {
+            menuItem.style.display = 'none';
+          }
+        } catch (err) {
+          console.error('Erro ao validar permissões', err);
+        }
+      })();
+  </script>
 <body>
   <header class="hero">
     <h2>CRM NEXO</h2>
@@ -27,7 +48,7 @@
           <ul class="submenu">
             <li><a href="/cadastroClientes">Cadastro de Cliente</a></li>
             <li><a href="/consultaCliente">Consulta Cliente</a></li>
-            <li><a href="/cadastroRepresentante">Cadastro de Representante </a></li>
+            <li id="menuCadastroRepresentante" ><a href="/cadastroRepresentante">Cadastro de Representante </a></li>
           </ul>
         </li>
 
