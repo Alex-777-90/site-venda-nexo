@@ -76,6 +76,30 @@ router.get(
 );
 
 
+// Rota para página de qualidade
+router.get('/rnc', requireAuth, (req, res) => {
+  console.log('Rota / RNC');
+  res.sendFile(path.resolve(__dirname, '..', 'views', 'RNC.html'));
+});
+
+router.get('/5porques', requireAuth, (req, res) => {
+  console.log('Rota / 5 Porques');
+  res.sendFile(path.resolve(__dirname, '..', 'views', '5Porque.html'));
+});
+
+router.get('/fotoNC', requireAuth, (req, res) => {
+  console.log('Rota / Foto NC');
+  res.sendFile(path.resolve(__dirname, '..', 'views', 'fotoNC.html'));
+});
+
+router.get('/descricaoFalha', requireAuth, (req, res) => {
+  console.log('Rota / descrição de Falha');
+  res.sendFile(path.resolve(__dirname, '..', 'views', 'descricaoFalha.html'));
+});
+
+
+
+
 // Rota para página de erro 401 (Senha incorreta)
 router.get('/error-401', (req, res) => {
     res.status(401).sendFile(path.join(__dirname, '..', 'views', 'error-401.html'));
