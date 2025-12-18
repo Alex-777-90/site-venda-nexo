@@ -60,6 +60,11 @@ router.get('/relatorio', requireAuth, (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'views', 'dashboard.html'));
 });
 
+router.get('/requesicaoAmostra', requireAuth, (req, res) => {
+  console.log('Rota / solicitação Amostra');
+  res.sendFile(path.resolve(__dirname, '..', 'views', 'requisicao-amostra.html'));
+});
+
 router.get(
   '/cadastroRepresentante',
   requireAuth,

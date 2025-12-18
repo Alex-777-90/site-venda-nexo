@@ -1,0 +1,196 @@
+* { box-sizing: border-box; }
+
+body{
+  margin:0;
+  padding:24px;
+  background:#d9d9d9; /* “fundo cinza” fora da folha */
+  font-family: Calibri, Arial, sans-serif;
+  color:#000;
+}
+
+.page{
+  display:flex;
+  justify-content:center;
+}
+
+.sheet{
+  width: 900px;              /* aparência igual ao Word/PDF no print */
+  min-height: 1180px;        /* “A4-like” */
+  background:#fff;
+  padding: 36px 70px;        /* margens visuais */
+  border: 0;
+}
+
+/* =========================
+   CABEÇALHO (com borda bege)
+   ========================= */
+.doc-header{
+  border: 1px solid #d6c79f;
+  padding: 10px 12px 0;
+}
+
+.header-grid{
+  display:grid;
+  grid-template-columns: 170px 1fr 210px;
+  align-items:center;
+  gap: 12px;
+  padding-bottom: 8px;
+}
+
+.logo-box{
+  height: 72px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+.logo-main{
+  font-weight:700;
+  font-size: 26px;
+  letter-spacing: 1px;
+  color:#666;
+  line-height: 1;
+}
+
+.logo-sub{
+  margin-top: 4px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color:#999;
+}
+
+.header-title{
+  text-align:center;
+  font-weight:700;
+  color:#7b7b7b;
+  letter-spacing: .4px;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+/* Meta table (Cód / Rev / Data) */
+.meta-table{
+  width:100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  color:#6b6b6b;
+}
+.meta-table td{
+  border: 1px solid #d6c79f;
+  padding: 6px 8px;
+}
+.meta-label{
+  width: 52px;
+  font-weight: 600;
+}
+
+/* Linha elaborado/revisado/aprovado */
+.sign-row{
+  display:grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border-top: 1px solid #d6c79f;
+}
+.sign-cell{
+  border-right: 1px solid #d6c79f;
+  padding: 6px 8px;
+  font-size: 12px;
+  color:#7b7b7b;
+}
+.sign-cell:last-child{ border-right: none; }
+
+/* =========================
+   TÍTULO CENTRAL
+   ========================= */
+.page-title{
+  margin: 42px 0 28px;
+  text-align:center;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+/* =========================
+   TABELA PRINCIPAL
+   ========================= */
+.form-area{
+  display:flex;
+  justify-content:center;
+}
+
+.main-table{
+  width: 600px;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.main-table th,
+.main-table td{
+  border: 1px solid #000;
+  padding: 6px 8px;
+  vertical-align: middle;
+}
+
+.main-table thead th{
+  background:#000;
+  color:#fff;
+  text-align:center;
+  font-weight:700;
+  font-size: 14px;
+  padding: 8px 8px;
+}
+
+/* Colunas */
+.col-left{ width: 48%; }
+.col-right{ width: 52%; }
+
+.req{
+  font-weight: 600;
+}
+
+.req.obs{
+  color:#000;
+}
+
+/* Inputs “parecem célula vazia” */
+.info input{
+  width:100%;
+  border:none;
+  outline:none;
+  font-family: inherit;
+  font-size: 12px;
+  padding: 2px 0;
+  background: transparent;
+}
+
+/* =========================
+   RODAPÉ
+   ========================= */
+.doc-footer{
+  position: relative;
+  margin-top: 360px;   /* empurra para perto do final da folha (igual print) */
+  text-align:center;
+  font-size: 9px;
+  color:#6b6b6b;
+}
+
+.footer-line{
+  height: 1px;
+  background:#6b6b6b;
+  width: 92%;
+  margin: 0 auto 8px;
+}
+
+.footer-text{
+  line-height: 1.4;
+}
+
+/* Impressão */
+@media print{
+  body{ background:#fff; padding:0; }
+  .sheet{
+    width: auto;
+    min-height: auto;
+    padding: 20mm 18mm;
+  }
+  .doc-footer{ margin-top: 0; }
+}
