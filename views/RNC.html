@@ -1,187 +1,293 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RNC - Relatório  de Não Conformidade</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        }
-
-        body {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle at top, #1f2933 0, #020617 55%, #000 100%);
-            color: #f9fafb;
-        }
-
-        .container {
-            text-align: center;
-            padding: 2.5rem 2rem;
-            max-width: 420px;
-        }
-
-        .card {
-            background: rgba(15, 23, 42, 0.9);
-            border-radius: 1.5rem;
-            padding: 2.5rem 2rem;
-            box-shadow:
-                0 25px 50px rgba(0, 0, 0, 0.6),
-                0 0 0 1px rgba(148, 163, 184, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* “Imagem” / ícone de construção */
-        .icon-wrapper {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 1.5rem;
-            border-radius: 1.25rem;
-            background: linear-gradient(135deg, #fbbf24, #eab308);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.4);
-        }
-
-        .icon-wrapper::before,
-        .icon-wrapper::after {
-            content: "";
-            position: absolute;
-            inset: 12px;
-            border-radius: 0.9rem;
-            background-image: repeating-linear-gradient(
-                -45deg,
-                rgba(15, 23, 42, 0.95),
-                rgba(15, 23, 42, 0.95) 10px,
-                rgba(15, 23, 42, 0.7) 10px,
-                rgba(15, 23, 42, 0.7) 20px
-            );
-            opacity: 0.7;
-        }
-
-        .icon {
-            position: relative;
-            font-size: 3rem;
-            z-index: 1;
-        }
-
-        h1 {
-            font-size: 1.8rem;
-            margin-bottom: 0.75rem;
-        }
-
-        p {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: #cbd5f5;
-            margin-bottom: 1.75rem;
-        }
-
-        .bar {
-            height: 10px;
-            border-radius: 999px;
-            overflow: hidden;
-            background: rgba(30, 64, 175, 0.35);
-            position: relative;
-        }
-
-        .bar-fill {
-            position: absolute;
-            inset: 0;
-            background-image: repeating-linear-gradient(
-                45deg,
-                #fbbf24,
-                #fbbf24 12px,
-                #000 12px,
-                #000 24px
-            );
-            animation: loading 1.5s linear infinite;
-        }
-
-        @keyframes loading {
-            0% {
-                transform: translateX(-30%);
-            }
-            100% {
-                transform: translateX(30%);
-            }
-        }
-
-        .small-text {
-            margin-top: 0.75rem;
-            font-size: 0.8rem;
-            color: #9ca3af;
-        }
-
-        .footer {
-            margin-top: 1.75rem;
-            font-size: 0.8rem;
-            color: #6b7280;
-        }
-
-        .footer span {
-            opacity: 0.9;
-        }
-
-        @media (max-width: 480px) {
-            .card {
-                padding: 2rem 1.5rem;
-            }
-
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            .icon-wrapper {
-                width: 100px;
-                height: 100px;
-            }
-
-            .icon {
-                font-size: 2.5rem;
-            }
-        }
-    </style>
+    <title>RNC - Relatório de Não Conformidade</title>
+    <!-- ajuste o caminho se precisar -->
+    <link rel="stylesheet" href="/css/rnc.css">
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <div class="icon-wrapper">
-                <div class="icon">🚧</div>
-            </div>
 
-            <h1>Página em construção</h1>
-            <p>
-                Estamos trabalhando para trazer uma nova experiência para você.<br />
-                Volte em breve para conferir as novidades.
-            </p>
+<div class="rnc-container">
 
-            <div class="bar">
-                <div class="bar-fill"></div>
-            </div>
-            <div class="small-text">
-                Progresso em andamento...
+    <!-- CABEÇALHO COM LOGO E INFOS -->
+    <header class="rnc-header">
+        <div class="logo-area">
+            <div class="logo-box">
+                <span class="logo-main">NEXO</span><br>
+                <span class="logo-sub">INTERNATIONAL</span>
             </div>
         </div>
 
-        <div class="footer">
-            <span>© <span id="year"></span> NEXO-2025. Todos os direitos reservados.</span>
+        <div class="title-area">
+            <div class="title-line1">SISTEMA DE GESTÃO INTEGRADO</div>
+            <div class="title-line2">RNC - Relatório  de Não Conformidade</div>
         </div>
-    </div>
 
-    <script>
-        // Ano automático no rodapé
-        document.getElementById("year").textContent = new Date().getFullYear();
-    </script>
+        <div class="info-area">
+            <div>FO.SGQ.003</div>
+            <div>Rev: 00</div>
+            <div>DATA: 01/07/2025</div>
+        </div>
+    </header>
+
+    <!-- ELABORADO / REVISADO / APROVADO -->
+    <section class="section section-assinaturas">
+        <table class="rnc-table assinaturas-table">
+            <tr>
+                <td>Elaborado: Jaqueline Sousa</td>
+                <td>Revisado: Marcia Melo</td>
+                <td>Aprovado: Pedro Lima</td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- DADOS BÁSICOS -->
+    <section class="section">
+        <table class="rnc-table">
+            <tr>
+                <td class="cell-label">RNC:</td>
+                <td></td>
+                <td class="cell-label">Data:</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="cell-label">Emitente:</td>
+                <td></td>
+                <td class="cell-label">Setor:</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="cell-label">Origem:</td>
+                <td></td>
+                <td class="cell-label">Processo:</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="cell-label">Nome do cliente, fornecedor:</td>
+                <td colspan="3"></td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- DESCRIÇÃO NC / PRODUTO / QTDE / LOTE / NF -->
+    <section class="section">
+        <table class="rnc-table">
+            <tr>
+                <td class="header-black" colspan="4">
+                    Descrição da não-conformidade (Item, produto ou requisito)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <textarea class="textarea linha-media"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="cell-label">Produto:</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr>
+                <td class="cell-label">Quantidade:</td>
+                <td></td>
+                <td class="cell-label">Lote:</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="cell-label">NF:</td>
+                <td colspan="3"></td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- DESCRIÇÃO DA NÃO CONFORMIDADE -->
+    <section class="section">
+        <table class="rnc-table">
+            <tr>
+                <td class="header-black">Descrição da não-conformidade:</td>
+            </tr>
+            <tr>
+                <td><textarea class="textarea linha-grande"></textarea></td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- DISPOSIÇÃO (AÇÃO IMEDIATA) -->
+    <section class="section">
+        <table class="rnc-table">
+            <tr>
+                <td class="header-black">Disposição (Ação imediata):</td>
+            </tr>
+            <tr>
+                <td><textarea class="textarea linha-grande"></textarea></td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- CAUSA RAIZ DO PROBLEMA -->
+    <section class="section">
+        <table class="rnc-table">
+            <tr>
+                <td class="header-black">
+                    Causa Raiz do Problema
+                    <span class="sub-text">
+                        (Identificar a causa da não-conformidade através das ferramentas da qualidade em anexo)
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td><textarea class="textarea linha-grande"></textarea></td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- ANÁLISE DA PROCEDÊNCIA -->
+    <section class="section">
+        <table class="rnc-table">
+            <tr>
+                <td class="cell-label" style="width: 30%;">Análise da procedência</td>
+                <td style="width: 10%;"></td>
+                <td style="width: 20%;" class="center"><label><input type="checkbox"> PROCEDE</label></td>
+                <td style="width: 20%;" class="center"><label><input type="checkbox"> NÃO PROCEDE</label></td>
+            </tr>
+            <tr>
+                <td class="cell-label">Prejuízo financeiro:</td>
+                <td colspan="3"></td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- PLANEJAMENTO DAS AÇÕES -->
+    <section class="section">
+        <table class="rnc-table">
+            <tr>
+                <td class="header-black" colspan="5">Planejamento das ações:</td>
+            </tr>
+            <tr>
+                <td class="header-black" style="width: 15%;">Tipo de ação</td>
+                <td class="header-black" style="width: 45%;">Descrição da ação</td>
+                <td class="header-black" style="width: 15%;">Responsável</td>
+                <td class="header-black" style="width: 12%;">Prazo</td>
+                <td class="header-black" style="width: 13%;">Data da implementação</td>
+            </tr>
+            <tr>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+            </tr>
+            <tr>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+            </tr>
+            <tr>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+            </tr>
+            <tr>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+                <td><textarea class="textarea linha-minima"></textarea></td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- AVALIAÇÃO DA EFICÁCIA -->
+    <section class="section">
+        <table class="rnc-table">
+            <tr>
+                <td class="header-black" style="width: 30%;">Avaliação da eficácia</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    A(s) ação(ões) tomada(s) para o problema descrito foi(ram) considerada(s):
+                    <label><input type="checkbox"> EFICAZ(es)</label>
+                    <label><input type="checkbox"> NÃO EFICAZ(es)</label>
+                </td>
+            </tr>
+            <tr>
+                <td class="header-black" colspan="2">Descrição do método utilizado</td>
+            </tr>
+            <tr>
+                <td colspan="2"><textarea class="textarea linha-media"></textarea></td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- NOVO REGISTRO / AVALIAÇÕES COMPLEMENTARES -->
+    <section class="section">
+        <table class="rnc-table">
+            <tr>
+                <td class="cell-label" style="width: 40%;">Será necessário a abertura de um novo registro?</td>
+                <td class="center"><label><input type="checkbox"> SIM</label></td>
+                <td class="center"><label><input type="checkbox"> NÃO</label></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="cell-label">Se sim, mencione a identificação do novo registro:</td>
+                <td colspan="3"></td>
+            </tr>
+        </table>
+    </section>
+
+    <section class="section">
+        <table class="rnc-table">
+            <tr>
+                <td class="header-black" colspan="4">Avaliações Complementares</td>
+            </tr>
+            <tr>
+                <td class="cell-label" style="width: 40%;">Haverá necessidade de atualizar riscos e oportunidades?</td>
+                <td class="center"><label><input type="checkbox"> SIM</label></td>
+                <td class="center"><label><input type="checkbox"> NÃO</label></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="cell-label">Se sim, indique a atualização:</td>
+                <td colspan="3"><textarea class="textarea linha-media"></textarea></td>
+            </tr>
+            <tr>
+                <td class="cell-label">Haverá necessidade de mudança no SGQ?</td>
+                <td class="center"><label><input type="checkbox"> SIM</label></td>
+                <td class="center"><label><input type="checkbox"> NÃO</label></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="cell-label">Se sim, indique a mudança:</td>
+                <td colspan="3"><textarea class="textarea linha-media"></textarea></td>
+            </tr>
+            <tr>
+                <td class="cell-label">Data de fechamento do registro:</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr>
+                <td class="cell-label">Responsável:</td>
+                <td colspan="3"></td>
+            </tr>
+        </table>
+    </section>
+
+</div><!-- fim do formulário -->
+
+
+<!-- FOOTER PRETO FORA DO FORM -->
+<footer class="rnc-footer">
+    <nav class="footer-menu">
+        <a target="_blank" href="/5Porques">5 Porquês</a> |
+        <a target="_blank" href="/fotoNC">Foto NC</a> |
+        <a target="_blank" href="/descricaoFalha">Descrição da Falha</a>
+    </nav>
+</footer>
+
 </body>
 </html>

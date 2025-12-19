@@ -1,0 +1,184 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.rnc-container {
+    width: 95%;
+    max-width: 1150px;
+    border: 2px solid #000;
+    padding: 10px 10px 30px;
+    background: #fff;
+}
+
+/* ---------- CABEÇALHO ---------- */
+.rnc-header {
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
+    border-bottom: 1px solid #000;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid #000;
+}
+
+.logo-box {
+    text-align: center;
+    border: 1px solid #000;
+    padding: 10px 15px;
+}
+
+.logo-main {
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.logo-sub {
+    font-size: 11px;
+}
+
+.title-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid #000;
+    padding: 8px;
+    text-align: center;
+}
+
+.title-line1 {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.title-line2 {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 3px;
+}
+
+.info-area {
+    font-size: 12px;
+    padding: 6px 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 1px solid #000;
+}
+
+/* ---------- SEÇÕES E TABELAS ---------- */
+.section {
+    margin-top: 6px;
+}
+
+.section-assinaturas {
+    margin-top: 0;
+}
+
+.rnc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.rnc-table td {
+    border: 1px solid #000;
+    padding: 4px;
+    vertical-align: top;
+}
+
+.assinaturas-table td {
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.header-black {
+    background: #000;
+    color: #fff;
+    font-weight: bold;
+    padding: 5px 4px;
+    font-size: 12px;
+}
+
+.cell-label {
+    background: #000;
+    color: #fff;
+    font-weight: bold;
+    padding: 4px;
+    font-size: 12px;
+    width: 300px;
+}
+
+.sub-text {
+    font-weight: normal;
+    font-size: 10px;
+}
+
+/* TEXTAREAS */
+.textarea {
+    width: 100%;
+    border: none;
+    resize: none;
+    font-family: inherit;
+    font-size: 12px;
+    padding: 4px;
+    outline: none;
+}
+
+.linha-minima { height: 40px; }
+.linha-media { height: 80px; }
+.linha-grande { height: 150px; }
+
+/* CHECKBOXES */
+.center { text-align: center; }
+label { font-size: 12px; margin-right: 10px; }
+
+/* FOOTER EXTERNO PRETO */
+.rnc-footer {
+    width: 100%;
+    background: #000;
+    color: #fff;
+    padding: 14px;
+    margin-top: 25px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Links do footer */
+.footer-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 6px;
+}
+
+.footer-menu a:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
+/* RESPONSIVO */
+@media (max-width: 900px) {
+    .rnc-header {
+        grid-template-columns: 1fr;
+    }
+    .title-area, .logo-area, .info-area {
+        border: none;
+        border-bottom: 1px solid #000;
+    }
+}
