@@ -9,12 +9,11 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
   <link rel="manifest" href="/images/site.webmanifest">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <link rel="stylesheet" href="/css/logistica.css?v=1743796395890">
+  <link rel="stylesheet" href="/css/logistica.css?v=1743796395893">
 </head>
 
 <body>
   <div class="container">
-    <!-- Cabeçalho -->
     <div class="header">
       <header class="header-container">
         <div class="header-left">
@@ -28,7 +27,6 @@
       </header>
     </div>
 
-    <!-- Botões superiores -->
     <div class="sairExcel">
       <button id="logoutButton1">Sair</button>
       <img class="img_link_excel" src="/images/excel.png"   alt="Exportar Excel" id="btnExportExcel" title="Exportar tabela">
@@ -38,10 +36,8 @@
       <img class="img_link_excel" src="/images/clean.png"    alt="Limpar Dados" id="btnClean" title="Limpar tabela">
     </div>
 
-    <!-- Feedback -->
     <div id="feedback1" style="display:none; text-align:center; font-weight:bold; margin:10px; color:red;"></div>
 
-    <!-- Filtros -->
     <div id="filters">
       <div class="menu-toggle">
         <button id="menuToggle" class="menu-button">
@@ -77,29 +73,21 @@
       </div>
     </div>
 
-    <!-- TOTAL GERAL (fora da tabela, em cima) -->
     <div id="grandTotal" class="grand-total"></div>
 
-    <!-- Tabela -->
     <div class="table-container">
       <table id="order-table1">
         <thead>
-          <tr>
-            <!-- O Cabeçalho é gerado dinamicamente pelo JS -->
-          </tr>
-        </thead>
+          </thead>
         <tbody></tbody>
       </table>
     </div>
 
-    <!-- Última modificação -->
     <div id="lastModInfo"></div>
   </div>
   
-  <!-- Script principal -->
-  <script src="/logistica02.js?v=1743796395890"></script>
+  <script src="/logistica02.js?v=1743796395893"></script>
 
-  <!-- Script de logout -->
   <script>
     async function logoutUser() {
       try {
@@ -112,6 +100,25 @@
       }
     }
     document.getElementById('logoutButton1').addEventListener('click', logoutUser);
+
+    // Menu toggle logic (mobile)
+    const menuToggle = document.getElementById('menuToggle');
+    const filterContainer = document.getElementById('filterContainer');
+    if(menuToggle && filterContainer){
+      menuToggle.addEventListener('click', () => {
+        if (filterContainer.style.display === 'flex') {
+          filterContainer.classList.add('closing');
+          filterContainer.addEventListener('animationend', () => {
+             filterContainer.style.display = 'none';
+             filterContainer.classList.remove('closing');
+             filterContainer.classList.remove('active');
+          }, { once: true });
+        } else {
+          filterContainer.style.display = 'flex';
+          filterContainer.classList.add('active');
+        }
+      });
+    }
   </script>
 </body>
 </html>

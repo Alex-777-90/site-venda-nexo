@@ -1,3 +1,5 @@
+/* public/css/logistica.css */
+
 /* ==== Colunas de mês (NOV/2025, DEZ/2025, ...) ==== */
 :root{
   --month-col-width: 68px;     /* ajuste: 64–76 px conforme preferir */
@@ -6,26 +8,13 @@
 }
 
 @keyframes modalAnimation {
-    from {
-        opacity: 0;
-        transform: translate3d(0, -20px, -5px);
-    }
-    to {
-        opacity: 1;
-        transform: translate3d(0, 0, 0);
-    }
+    from { opacity: 0; transform: translate3d(0, -20px, -5px); }
+    to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
-/* Define a animação de saída */
 @keyframes modalAnimationOut {
-    from {
-        opacity: 1;
-        transform: translate3d(0, 0, 0);
-    }
-    to {
-        opacity: 0;
-        transform: translate3d(0, -20px, -5px);
-    }
+    from { opacity: 1; transform: translate3d(0, 0, 0); }
+    to { opacity: 0; transform: translate3d(0, -20px, -5px); }
 }
 
 body {
@@ -60,7 +49,7 @@ body {
 .header-container {
     display: flex;
     align-items: center;
-    justify-content: center; /* Centraliza o título no centro total */
+    justify-content: center;
     background-color: #333;
     color: #ffffff;
     padding: 15px 40px;
@@ -70,58 +59,22 @@ body {
     box-sizing: border-box;
 }
 
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
+.header-left { display: flex; align-items: center; gap: 15px; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 15px; }
+.link-wrapper { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.link-label { color: #ffffff; font-size: 16px; font-weight: normal; }
 
-.header-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 15px;
-}
-
-.link-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 5px;
-}
-
-.link-label {
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: normal;
-}
-
-/* Logo fixo no canto esquerdo */
 .header-logo {
     position: absolute;
     left: 40px;
     top: 50%;
     transform: translateY(-50%);
 }
+.header-logo img { width: 110px; height: auto; }
 
-.header-logo img {
-    width: 110px; /* Aumentado (era 80px) */
-    height: auto;
-}
-
-.img_link_excel {
-    width: 40px;
-    cursor: pointer;
-}
-
-.img_link_excel:hover {
-    width: 50px;
-}
-
-.sairExcel {
-    display: flex;
-    gap: 20px;
-}
+.img_link_excel { width: 40px; cursor: pointer; }
+.img_link_excel:hover { width: 50px; }
+.sairExcel { display: flex; gap: 20px; }
 
 .header-container .header-title {
     color: #ffffff !important;
@@ -131,15 +84,8 @@ body {
     visibility: visible;
 }
 
-.header-right h4 {
-    color: #ffffff;
-    margin: 0;
-    font-size: 16px;
-}
-
-.header-right h4 strong {
-    color: #eeea0e;
-}
+.header-right h4 { color: #ffffff; margin: 0; font-size: 16px; }
+.header-right h4 strong { color: #eeea0e; }
 
 .link_logistica {
     text-decoration: none;
@@ -147,7 +93,6 @@ body {
     font-size: 20px;
     flex-shrink: 1;
 }
-
 .link_logistica:hover {
     background-color: rgb(31, 29, 30);
     color: rgb(250, 242, 247);
@@ -155,36 +100,35 @@ body {
     border-radius: 5px;
 }
 
-h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-}
+h2 { text-align: center; margin-bottom: 20px; padding-bottom: 20px; }
 
+/* === Tabela === */
 table {
     width: 100%;
     border-collapse: collapse;
     margin: 0;
+    /* MANTIDO O LAYOUT FIXO QUE É CRUCIAL PARA AS LARGURAS */
+    table-layout: fixed; 
 }
 
+/* === CONFIGURAÇÃO PADRÃO DE STICKY === */
 table thead th {
     position: sticky;
     top: 0;
     background-color: #333;
     color: #f9f9f9;
-    z-index: 10; /* Ajustado para ser menor que o modal */
-    text-align: center;       /* centraliza o texto */
-    vertical-align: middle;   /* centraliza verticalmente */
+    z-index: 10;
+    text-align: center;
+    vertical-align: middle;
     font-weight: bold;
     font-size: 13px;  
-
 }
 
 table th,
 table td {
     border: 1px solid #ccc;
-    padding: 6px;             /* diminui o espaçamento */
-    font-size: 11px;  
+    padding: 6px;
+    font-size: 11px;
     text-align: left;
     background-color: #f9f9f9;
     white-space: nowrap;
@@ -192,19 +136,11 @@ table td {
     text-overflow: ellipsis;
 }
 
-table th {
-    background-color: #333;
-    color: #f9f9f9;
-}
+table th { background-color: #333; color: #f9f9f9; }
+table tr:nth-child(even) { background-color: #f9f9f9; }
+table tr:hover { background-color: #f1f1f1; }
 
-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-table tr:hover {
-    background-color: #f1f1f1;
-}
-
+/* === FILTROS === */
 #filters {
     margin-bottom: 20px;
     display: flex;
@@ -215,98 +151,20 @@ table tr:hover {
     max-width: 1200px;
 }
 
-.filter-inputs {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.filter-row {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-}
-
-.filter-item {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.filter-buttons {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
-}
-
-#filters label {
-    font-weight: bold;
-}
-
-#filters input,
-#filters button {
-    padding: 5px;
-}
-
-#representanteFilter,
-#representanteFilter1 {
-    width: 80px;
-    border-radius: 5px;
-    border: 1px solid #0f0f0f;
-}
-
-#statusFilter,
-#statusFilter1,
-#statusSeparacaoFilter {
-    padding: 7px;
-    width: 120px;
-    border-radius: 5px;
-    border: 1px solid #0f0f0f;
-}
-
-button:hover {
-    background-color: rgb(39, 37, 38);
-    color: rgb(250, 242, 247);
-    border: none;
-}
-
-#applyFilters,
-#clearFilters,
-#logoutButton,
-#logoutButton1 {
-    padding: 6px;
-    margin-bottom: 5px;
-    border-radius: 5px;
-    border: 1px solid #0f0f0f;
-}
-
-#logoutButton1 {
-    width: 50px;
-}
-
-#clienteCNPJFilter1,
-#clienteCNPJFilter,
-#dataPedidoInicioFilter1,
-#dataPedidoInicioFilter,
-#dataPedidoFimFilter1,
-#dataPedidoFimFilter {
-    padding: 7px;
-    border-radius: 5px;
-    border: 1px solid #0f0f0f;
-}
-
-#applyFilters1,
-#clearFilters1 {
-    border-radius: 5px;
-    border: 1px solid #0f0f0f;
-}
-
-.buttons_filters {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
+.filter-inputs { display: flex; flex-direction: column; gap: 15px; }
+.filter-row { display: flex; gap: 20px; align-items: center; }
+.filter-item { display: flex; align-items: center; gap: 5px; }
+.filter-buttons { display: flex; flex-direction: row; gap: 10px; align-items: center; }
+#filters label { font-weight: bold; }
+#filters input, #filters button { padding: 5px; }
+#representanteFilter, #representanteFilter1 { width: 80px; border-radius: 5px; border: 1px solid #0f0f0f; }
+#statusFilter, #statusFilter1, #statusSeparacaoFilter { padding: 7px; width: 120px; border-radius: 5px; border: 1px solid #0f0f0f; }
+button:hover { background-color: rgb(39, 37, 38); color: rgb(250, 242, 247); border: none; }
+#applyFilters, #clearFilters, #logoutButton, #logoutButton1 { padding: 6px; margin-bottom: 5px; border-radius: 5px; border: 1px solid #0f0f0f; }
+#logoutButton1 { width: 50px; }
+#clienteCNPJFilter1, #clienteCNPJFilter, #dataPedidoInicioFilter1, #dataPedidoInicioFilter, #dataPedidoFimFilter1, #dataPedidoFimFilter { padding: 7px; border-radius: 5px; border: 1px solid #0f0f0f; }
+#applyFilters1, #clearFilters1 { border-radius: 5px; border: 1px solid #0f0f0f; }
+.buttons_filters { display: flex; justify-content: flex-end; gap: 10px; }
 
 .table-container {
     width: 100%;
@@ -316,13 +174,14 @@ button:hover {
     overflow-y: auto;
     margin-top: 10px;
     position: relative;
-    z-index: 5; /* Ajustado para ser menor que o modal */
+    z-index: 5; 
 }
 
 #order-table1 {
     width: 100%;
     background-color: #f9f9f9;
     border-collapse: collapse;
+    table-layout: fixed; /* Reforçando */
 }
 
 /* header e células marcadas como col-month */
@@ -335,7 +194,6 @@ button:hover {
   text-align: right;
 }
 
-/* inputs dentro das colunas de mês */
 #order-table1 td.col-month input{
   width: calc(var(--month-col-width) - 12px);
   min-width: calc(var(--month-col-width) - 12px);
@@ -345,454 +203,124 @@ button:hover {
   padding: var(--month-input-pad);
 }
 
-/* cabeçalho dos meses um pouco menor */
 #order-table1 th.col-month{
   font-size: 12px;
   padding: 6px;
 }
 
-.dataEmissao {
-    min-width: 140px;
-    max-width: 140px;
+.dataEmissao { min-width: 140px; max-width: 140px; }
+.numNotas { min-width: 80px; max-width: 100px; }
+.codCliente { min-width: 80px; max-width: 100px; }
+.cliente { width: auto; min-width: 150px; max-width: 500px; }
+.clienteCNPJ { min-width: 120px; max-width: 150px; }
+.uf { min-width: 50px; max-width: 60px; }
+.codRep { min-width: 80px; max-width: 100px; }
+.codTrans { min-width: 80px; max-width: 100px; }
+.transportadora { min-width: 150px; max-width: 200px; }
+.saida { min-width: 100px; max-width: 120px; }
+.previsaoEntrega { min-width: 170px; max-width: 170px; }
+.dataEntrega { min-width: 150px; max-width: 150px; }
+.statusEntrega { min-width: 100px; max-width: 120px; }
+
+.agenda, .ocorrencia {
+    width: auto; min-width: 150px; max-width: 500px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.agenda:hover, .ocorrencia:hover {
+    overflow: visible; white-space: normal; max-width: none; background-color: #f1f1f1; z-index: 1;
 }
 
-.numNotas {
-    min-width: 80px;
-    max-width: 100px;
-}
+.menu-toggle { display: none; width: 20%; max-width: 300px; margin: 0 auto; margin-bottom: 15px; }
+.menu-button { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 10px; background-color: #333; color: #ffffff; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+.menu-button:hover { background-color: rgba(225, 0, 152); color: rgb(250, 242, 247); }
+.menu-icon { font-size: 20px; }
 
-.codCliente {
-    min-width: 80px;
-    max-width: 100px;
-}
+.filter-container { display: flex; align-items: flex-start; gap: 20px; width: 100%; max-width: 1200px; }
+.filter-container.active { display: flex; animation: modalAnimation 0.70s forwards; }
+.filter-container.closing { animation: modalAnimationOut 0.70s forwards; }
 
-.cliente {
-    width: auto;
-    min-width: 150px;
-    max-width: 500px;
-}
+.modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); }
+.modal-content { background-color: #fff; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 300px; text-align: center; border-radius: 5px; position: relative; z-index: 10000; }
+.modal-button { margin: 10px; padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
+.modal-button:hover { background-color: #0056b3; }
+.close-button { background-color: #dc3545; }
+.close-button:hover { background-color: #c82333; }
 
-.clienteCNPJ {
-    min-width: 120px;
-    max-width: 150px;
-}
+#lastModInfo { width: 100%; text-align: right; margin-top: 10px; padding-right: 70px; font-weight: 300; font-size: 12px; }
 
-.uf {
-    min-width: 50px;
-    max-width: 60px;
-}
+/* === LARGURAS ESPECÍFICAS DAS COLUNAS (DO SEU CÓDIGO ANTIGO) === */
 
-.codRep {
-    min-width: 80px;
-    max-width: 100px;
-}
+#order-table1 th:nth-child(1), #order-table1 td:nth-child(1) { width: 105px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#order-table1 th:nth-child(2), #order-table1 td:nth-child(2) { width: 160px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#order-table1 th:nth-child(3), #order-table1 td:nth-child(3) { width: 130px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#order-table1 th:nth-child(4), #order-table1 td:nth-child(4) { width: 90px;  max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#order-table1 th:nth-child(5), #order-table1 td:nth-child(5) { width: 90px;  max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#order-table1 th:nth-child(6), #order-table1 td:nth-child(6) { width: 90px;  max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#order-table1 th:nth-child(7), #order-table1 td:nth-child(7) { width: 170px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-.codTrans {
-    min-width: 80px;
-    max-width: 100px;
-}
-
-.transportadora {
-    min-width: 150px;
-    max-width: 200px;
-}
-
-.saida {
-    min-width: 100px;
-    max-width: 120px;
-}
-
-.previsaoEntrega {
-    min-width: 170px;
-    max-width: 170px;
-}
-
-.dataEntrega {
-    min-width: 150px;
-    max-width: 150px;
-}
-
-.statusEntrega {
-    min-width: 100px;
-    max-width: 120px;
-}
-
-.agenda,
-.ocorrencia {
-    width: auto;
-    min-width: 150px;
-    max-width: 500px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.agenda:hover,
-.ocorrencia:hover {
-    overflow: visible;
-    white-space: normal;
-    max-width: none;
-    background-color: #f1f1f1;
-    z-index: 1;
-}
-
-.menu-toggle {
-    display: none;
-    width: 20%;
-    max-width: 300px;
-    margin: 0 auto;
-    margin-bottom: 15px;
-}
-
-.menu-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    padding: 10px;
-    background-color: #333;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-.menu-button:hover {
-    background-color: rgba(225, 0, 152);
-    color: rgb(250, 242, 247);
-}
-
-.menu-icon {
-    font-size: 20px;
-}
-
-.filter-container {
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
-    width: 100%;
-    max-width: 1200px;
-}
-
-.filter-container.active {
-    display: flex;
-    animation: modalAnimation 0.70s forwards;
-}
-
-.filter-container.closing {
-    animation: modalAnimationOut 0.70s forwards;
-}
-
-/* Estilo para o modal */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 9999; /* Aumentado para garantir que o modal fique acima de tudo */
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-content {
-    background-color: #fff;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 300px;
-    text-align: center;
-    border-radius: 5px;
-    position: relative;
-    z-index: 10000; /* Aumentado para garantir que o conteúdo do modal fique acima */
-}
-
-.modal-button {
-    margin: 10px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.modal-button:hover {
-    background-color: #0056b3;
-}
-
-.close-button {
-    background-color: #dc3545;
-}
-
-.close-button:hover {
-    background-color: #c82333;
-}
-
-#lastModInfo {
-    width: 100%;
-    text-align: right;
-    margin-top: 10px;
-    padding-right: 70px;
-    font-weight: 300;
-    font-size: 12px; 
-}
-
-
-/* Deixar a coluna "Nome do PN" mais estreita */
-
-/* Garante que o navegador respeite as larguras das colunas */
-#order-table1 {
-    table-layout: fixed;
-}
-
-
-
-#order-table1 th:nth-child(1),
-#order-table1 td:nth-child(1) {
-
-    width: 105px;          /* ajuste o número como quiser (200, 180, 250...) */
-    max-width: 200px;
-    overflow: hidden;      /* se o texto passar do limite, esconde o resto   */
-    text-overflow: ellipsis; /* coloca "..." no fim se estourar              */
-    white-space: nowrap;   /* impede quebrar linha dentro da célula         */
-}
-
-#order-table1 th:nth-child(2),
-#order-table1 td:nth-child(2) {
-
-    width: 160px;          /* ajuste o número como quiser (200, 180, 250...) */
-    max-width: 200px;
-    overflow: hidden;      /* se o texto passar do limite, esconde o resto   */
-    text-overflow: ellipsis; /* coloca "..." no fim se estourar              */
-    white-space: nowrap;   /* impede quebrar linha dentro da célula         */
-}
-
-#order-table1 th:nth-child(3),
-#order-table1 td:nth-child(3) {
-
-    width: 130px;          /* ajuste o número como quiser (200, 180, 250...) */
-    max-width: 200px;
-    overflow: hidden;      /* se o texto passar do limite, esconde o resto   */
-    text-overflow: ellipsis; /* coloca "..." no fim se estourar              */
-    white-space: nowrap;   /* impede quebrar linha dentro da célula         */
-}
-
-#order-table1 th:nth-child(4),
-#order-table1 td:nth-child(4) {
-
-    width: 90px;          /* ajuste o número como quiser (200, 180, 250...) */
-    max-width: 200px;
-    overflow: hidden;      /* se o texto passar do limite, esconde o resto   */
-    text-overflow: ellipsis; /* coloca "..." no fim se estourar              */
-    white-space: nowrap;   /* impede quebrar linha dentro da célula         */
-}
-
-
-#order-table1 th:nth-child(5),
-#order-table1 td:nth-child(5) {
-
-    width: 90px;          /* ajuste o número como quiser (200, 180, 250...) */
-    max-width: 200px;
-    overflow: hidden;      /* se o texto passar do limite, esconde o resto   */
-    text-overflow: ellipsis; /* coloca "..." no fim se estourar              */
-    white-space: nowrap;   /* impede quebrar linha dentro da célula         */
-}
-
-#order-table1 th:nth-child(6),
-#order-table1 td:nth-child(6) {
-
-    width: 90px;          /* ajuste o número como quiser (200, 180, 250...) */
-    max-width: 200px;
-    overflow: hidden;      /* se o texto passar do limite, esconde o resto   */
-    text-overflow: ellipsis; /* coloca "..." no fim se estourar              */
-    white-space: nowrap;   /* impede quebrar linha dentro da célula         */
-}
-
-#order-table1 th:nth-child(7),
-#order-table1 td:nth-child(7) {
-
-    width: 170px;          /* ajuste o número como quiser (200, 180, 250...) */
-    max-width: 200px;
-    overflow: hidden;      /* se o texto passar do limite, esconde o resto   */
-    text-overflow: ellipsis; /* coloca "..." no fim se estourar              */
-    white-space: nowrap;   /* impede quebrar linha dentro da célula         */
-}
-
-#order-table1 th:nth-child(15),
-#order-table1 td:nth-child(15) {
-
-    width: 140px;          /* ajuste o número como quiser (200, 180, 250...) */
-    max-width: 200px;
-    overflow: hidden;      /* se o texto passar do limite, esconde o resto   */
-    text-overflow: ellipsis; /* coloca "..." no fim se estourar              */
-    white-space: nowrap;   /* impede quebrar linha dentro da célula         */
-}
-
-#order-table1 th:nth-child(16),
-#order-table1 td:nth-child(16) {
-
-    width: 140px;          /* ajuste o número como quiser (200, 180, 250...) */
-    max-width: 200px;
-    overflow: hidden;      /* se o texto passar do limite, esconde o resto   */
-    text-overflow: ellipsis; /* coloca "..." no fim se estourar              */
-    white-space: nowrap;   /* impede quebrar linha dentro da célula         */
-}
-
-#order-table1 th:nth-child(17),
-#order-table1 td:nth-child(17) {
-
-    width: 0px;          /* ajuste o número como quiser (200, 180, 250...) */
-    max-width: 200px;
-    overflow: hidden;      /* se o texto passar do limite, esconde o resto   */
-    text-overflow: ellipsis; /* coloca "..." no fim se estourar              */
-    white-space: nowrap;   /* impede quebrar linha dentro da célula         */
-}
-
-#order-table1 th:nth-child(18),
-#order-table1 td:nth-child(18) {
-
-    width: 140px;          /* ajuste o número como quiser (200, 180, 250...) */
-    max-width: 200px;
-    overflow: hidden;      /* se o texto passar do limite, esconde o resto   */
-    text-overflow: ellipsis; /* coloca "..." no fim se estourar              */
-    white-space: nowrap;   /* impede quebrar linha dentro da célula         */
-}
+/* Estas colunas abaixo (15 a 18) parecem ser as colunas finais (Total, Usuário, Data Modificação) */
+#order-table1 th:nth-child(15), #order-table1 td:nth-child(15) { width: 140px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#order-table1 th:nth-child(16), #order-table1 td:nth-child(16) { width: 140px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#order-table1 th:nth-child(17), #order-table1 td:nth-child(17) { width: -5px;   max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* Oculto? */
+#order-table1 th:nth-child(18), #order-table1 td:nth-child(18) { width: 140px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 
 /* =========================
-   Coluna TOTAL
+   ESTILOS NOVOS ADICIONADOS (PARA OS TOTAIS E HEADER DUPLO)
+   Mantemos as larguras acima e só ajustamos a "altura" (top)
    ========================= */
+
+/* Coluna TOTAL (Laranja) */
 #order-table1 th.col-total {
-  background-color: #f7931e; /* laranja */
+  background-color: #f7931e;
   color: #ffffff;
   text-align: center;
 }
+#order-table1 td.col-total { text-align: center; }
+.grand-total { margin-top: 8px; margin-bottom: 4px; text-align: right; font-weight: 600; }
 
-/* células da coluna TOTAL */
-#order-table1 td.col-total {
-  text-align: center;
+/* AJUSTE PARA O CABEÇALHO DUPLO (2 LINHAS FIXAS) 
+   A primeira linha (Titulos) usa o top:0 padrão definido lá em cima.
+   A segunda linha (Totais) precisa descer um pouco (top: 25px) para não ficar embaixo da primeira.
+*/
+
+/* Força altura fixa nas linhas de cabeçalho para o cálculo do sticky funcionar bem */
+.header-row-titles th {
+    top: 0;
+    height: 25px; /* Altura da linha de títulos REDUZIDA */
+    z-index: 20;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
 }
 
-/* Total geral (fora da tabela) */
-.grand-total {
-  margin-top: 8px;
-  margin-bottom: 4px;
-  text-align: right;
-  font-weight: 600;
+.header-row-totals th {
+    top: 25px; /* Desloca para baixo da linha de títulos (IGUAL A ALTURA ACIMA) */
+    height: 25px; /* Altura da linha de totais REDUZIDA */
+    z-index: 20;
+    background-color: #333; /* Fundo sólido */
+    color: #ffd700;         /* Amarelo */
+    font-weight: 800;
+    border-top: none;       /* Remove borda dupla entre headers */
+    padding-top: 2px;
+    padding-bottom: 2px;
 }
 
-/* Media query para telas menores (celular) */
+/* Responsividade Mobile */
 @media (max-width: 768px) {
-    .header-container {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-        padding: 10px;
-    }
-
-    .header-left {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .header-right {
-        width: 100%;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 10px;
-    }
-
-    .link-wrapper {
-        align-items: center;
-    }
-
-    .header-right h4 {
-        font-size: 14px;
-    }
-
-    .link-label {
-        font-size: 14px;
-    }
-
-    .link_logistica {
-        font-size: 16px;
-    }
-
-    .menu-toggle {
-        display: block;
-    }
-
-    .filter-container {
-        display: none;
-        flex-direction: column;
-        width: 100%;
-        max-width: 300px;
-        margin: 0 auto;
-    }
-
-    .filter-container.active {
-        display: flex;
-    }
-
-    #filters {
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        max-width: none;
-        margin: 0 auto;
-    }
-
-    .filter-inputs {
-        width: 100%;
-        max-width: 300px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .filter-row {
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .filter-item {
-        width: 100%;
-        max-width: 300px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 5px;
-    }
-
-    .filter-item label {
-        width: 100%;
-        text-align: center;
-    }
-
-    .filter-item input,
-    .filter-item select {
-        width: 100%;
-        max-width: 200px;
-    }
-
-    #representanteFilter1 {
-        max-width: 50px;
-    }
-
-    .filter-buttons {
-        width: 100%;
-        max-width: 300px;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        margin-top: 15px;
-    }
+    .header-container { flex-direction: column; align-items: center; gap: 10px; padding: 10px; }
+    .header-left, .header-right { width: 100%; justify-content: center; align-items: center; text-align: center; }
+    .header-right { flex-direction: column; gap: 10px; }
+    .link-wrapper { align-items: center; }
+    .header-right h4, .link-label { font-size: 14px; }
+    .link_logistica { font-size: 16px; }
+    .menu-toggle { display: block; }
+    .filter-container { display: none; flex-direction: column; width: 100%; max-width: 300px; margin: 0 auto; }
+    .filter-container.active { display: flex; }
+    #filters { flex-direction: column; align-items: center; width: 100%; max-width: none; margin: 0 auto; }
+    .filter-inputs { width: 100%; max-width: 300px; display: flex; justify-content: center; align-items: center; }
+    .filter-row { flex-direction: column; gap: 10px; width: 100%; display: flex; justify-content: center; align-items: center; }
+    .filter-item { width: 100%; max-width: 300px; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .filter-item label { width: 100%; text-align: center; }
+    .filter-item input, .filter-item select { width: 100%; max-width: 200px; }
+    #representanteFilter1 { max-width: 50px; }
+    .filter-buttons { width: 100%; max-width: 300px; display: flex; flex-direction: row; justify-content: center; margin-top: 15px; }
 }
